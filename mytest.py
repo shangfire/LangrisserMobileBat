@@ -114,7 +114,7 @@ class CompareImage:
 
         pre = round((sub_data / (x * y)), 6)
         # print(str(pre * 100) + '%')
-        print('Compare the image result is: ' + str(pre))
+        print('图像对比结果: ' + str(pre))
         return pre
 
 
@@ -158,26 +158,47 @@ def classify_hist_with_split(image1, image2, size=(256, 256)):
     return sub_data
 
 
-# 体力
+def image_binarization(img_path, threshold):
+    # 图像二值化
+    img = Image.open(img_path)
+    img = img.convert('L')
+    img.save("grey.jpg")
+
+    table = []
+    for i in range(256):
+        if i < threshold:
+            table.append(0)
+        else:
+            table.append(1)
+
+    # 图片二值化
+    img = img.point(table, '1')
+    img.save("binarization.jpg")
+
+
+# 一些预定义数值
 target_xg_id = 5
 target_round = 0
 start_pc = 120
 start_hb = 10
 start_time = time.time()
-sleep_lv1 = 500
-sleep_lv2 = 1000
-sleep_lv3 = 2000
-sleep_lv4 = 3000
-sleep_lv5 = 5000
 success_round = 0
 eat_bg = 0
 
-# grab_pos(636, 351, 771, 395)
+# 测试代码
+# grab_pos(652, 359, 755, 389)
 # grab_pos(445, 236, 573, 270)
-img1 = cv2.imread("grab.jpg")
-img2 = cv2.imread("1.jpg")
-print(classify_hist_with_split(img1, img2, (135, 44)))
-bat_exit()
+# image_binarization("grab.jpg", 200)
+# img1 = cv2.imread("grey.jpg")
+# img2 = cv2.imread("grey1.jpg")
+# print(classify_hist_with_split(img1, img2))
+# CompareImage.compare_image("grey.jpg", "grey1.jpg")
+# CompareImage.compare_image("grey.jpg", "grey2.jpg")
+# img1 = cv2.imread("binarization.jpg")
+# img2 = cv2.imread("binarization1.jpg")
+# print(classify_hist_with_split(img1, img2))
+# CompareImage.compare_image("binarization.jpg", "binarization1.jpg")
+# bat_exit()
 
 # 脚本开始
 input("兄贵挂机脚本（v1.0）即将开始，请确保：\n\
@@ -219,7 +240,9 @@ print("当前体力为：" + str(start_pc))
 print("当前汉堡为：" + str(start_hb))
 input("输入回车表示确认")
 
-print("\n脚本开始")
+start_time = time.time()
+
+print("\n脚本正式开始")
 win32api.Sleep(1000)
 print("\n查找梦幻模拟战窗口")
 handle_lan = win32gui.FindWindow("UnityWndClass", "梦幻模拟战")
@@ -236,11 +259,11 @@ win32api.Sleep(1000)
 
 print("点击秘境")
 single_click(977, 303)
-win32api.Sleep(1000)
+win32api.Sleep(2000)
 
 print("点击兄贵健身房")
 single_click(530, 160)
-win32api.Sleep(1000)
+win32api.Sleep(2000)
 
 while True:
     print("检查当前体力是否足够（检查体力会有些许误差）")
@@ -260,7 +283,7 @@ while True:
         single_click(420, 469)
         win32api.Sleep(2000)
         print("点击空白消除汉堡对话框")
-        single_click(420, 469)
+        single_click(267, 118)
         win32api.Sleep(1000)
     else:
         print("当前体力为：" + str(current_pc) + ",足够继续")
@@ -272,35 +295,35 @@ while True:
             single_click(219, 228)
         elif target_xg_id == 2:
             single_click(97, 306) # 这个位置是容易被邀请遮挡的位置，故定位靠左一点
-        elif target_xg_id == 2:
+        elif target_xg_id == 3:
             single_click(219, 389)
-        elif target_xg_id == 2:
+        elif target_xg_id == 4:
             single_click(219, 465)
-        elif target_xg_id == 2:
+        elif target_xg_id == 5:
             single_click(219, 552)
-        elif target_xg_id == 2:
+        elif target_xg_id == 6:
             single_click(219, 630)
-        win32api.Sleep(500)
+        win32api.Sleep(1000)
 
         print("点击组队")
         single_click(958, 700)
-        win32api.Sleep(2000)
+        win32api.Sleep(3000)
 
         print("向上拖拽列表")
         drag_to_top(375, 500, 250)
-        win32api.Sleep(1000)
+        win32api.Sleep(2000)
 
         print("选中LV.70")
         single_click(371, 638)
-        win32api.Sleep(1000)
+        win32api.Sleep(2000)
 
         print("点击创建队伍")
         single_click(870, 700)
-        win32api.Sleep(1000)
+        win32api.Sleep(2000)
 
         print("点击创建")
         single_click(652, 585)
-        win32api.Sleep(1500)
+        win32api.Sleep(2000)
 
         print("循环检测三号位是否存在")
         check_pos_3_timeout = False
@@ -313,20 +336,22 @@ while True:
                 check_pos_3_timeout = True
                 break
             print("点击三号位位置")
-            single_click(770, 355)
-            win32api.Sleep(1000)
+            single_click(779, 282)
+            win32api.Sleep(1500)
             print("截屏当前位置")
-            grab_pos(636, 351, 771, 395)
+            grab_pos(652, 359, 755, 389)
+            image_binarization("grab.jpg", 200)
             print("比对预留图像")
+            com_ret = CompareImage.compare_image("grey.jpg", "grey1.jpg")
             # com_ret = CompareImage.compare_image("grab.jpg", "1.jpg")
-            com_ret = classify_hist_with_split("grab.jpg", "1.jpg")
+            # com_ret = classify_hist_with_split("grab.jpg", "1.jpg")
             # os.rename("grab.jpg", "grab" + str(index) + ".jpg")
             # index = index + 1
-            if com_ret > 0.5:
+            if com_ret > 0.9:
                 print("比对成功，三号位存在")
                 print("点击空白处消除三号位资料框")
                 single_click(787, 171)
-                win32api.Sleep(sleep_lv2)
+                win32api.Sleep(1000)
                 print("点击开始战斗")
                 single_click(835, 586)
                 win32api.Sleep(5000)
@@ -337,7 +362,7 @@ while True:
                 win32api.Sleep(1000)
 
         if check_pos_3_timeout:
-            win32api.Sleep(3000)
+            win32api.Sleep(5000)
             print("点击返回")
             single_click(83, 59)
             win32api.Sleep(1000)
@@ -347,35 +372,42 @@ while True:
     print("战斗开始")
     print("点击出击")
     single_click(957, 700)
-    print("循环检测战斗是否已结束")
+    battle_start_time = time.time()
     while True:
         win32api.Sleep(3000)
-        if success_round == 0:
-            print("第一次刷，点击自动")
+        battle_last_time = time.time() - battle_start_time
+        if success_round == 0 and battle_last_time < 60:
+            print("第一次刷，在60秒内定时点击自动")
             single_click(977, 232)
             win32api.Sleep(1000)
 
-        print("截屏战斗结算图样")
-        grab_pos(445, 236, 573, 270)
-        print("比对预留图像")
-        com_ret = CompareImage.compare_image("grab.jpg", "2.jpg")
-        if com_ret > 0.5:
-            print("比对成功，战斗已结束")
-            win32api.Sleep(2000)
-            print("点击空白处消除战斗结算框")
-            single_click(542, 110)
-            win32api.Sleep(1000)
-            print("点击空白处打开宝箱")
-            single_click(542, 110)
-            win32api.Sleep(1000)
-            print("点击空白处继续")
-            single_click(542, 110)
-            win32api.Sleep(1000)
-            print("点击取消邀请")
-            single_click(432, 470)
-            win32api.Sleep(5000)
-            success_round = success_round + 1
-            break
+        if battle_last_time > 240:
+            print("战斗已超过四分钟，截屏战斗结算区域")
+            grab_pos(445, 236, 573, 270)
+            image_binarization("grab.jpg", 200)
+            print("比对预留图像")
+            # com_ret = CompareImage.compare_image("grab.jpg", "2.jpg")
+            com_ret = CompareImage.compare_image("grey.jpg", "grey2.jpg")
+            if com_ret > 0.9:
+                print("比对成功，战斗已结束")
+                win32api.Sleep(5000)
+                print("点击空白处消除战斗结算框")
+                single_click(542, 110)
+                win32api.Sleep(3000)
+                print("点击空白处打开宝箱")
+                single_click(542, 110)
+                win32api.Sleep(4000)
+                print("点击空白处打开每日奖励（可能有，可能没有，不影响，多点一次空白而已）")
+                single_click(542, 110)
+                win32api.Sleep(4000)
+                print("点击空白处继续")
+                single_click(542, 110)
+                win32api.Sleep(3000)
+                print("点击取消邀请")
+                single_click(432, 470)
+                win32api.Sleep(5000)
+                success_round = success_round + 1
+                break
 
     print("战斗结束，总战斗次数为：" + str(success_round))
     if target_round != 0 and success_round >= target_round:
