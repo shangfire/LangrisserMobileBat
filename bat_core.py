@@ -190,8 +190,8 @@ def bat_main():
 
     config = configparser.ConfigParser()
     config.read("config.ini")
-    threshold1 = config.get("threshold", "threshold1")
-    threshold2 = config.get("threshold", "threshold2")
+    threshold1 = float(config.get("threshold", "threshold1"))
+    threshold2 = float(config.get("threshold", "threshold2"))
 
     # 测试代码
     # grab_pos(652, 359, 755, 389)
@@ -209,12 +209,12 @@ def bat_main():
     # bat_exit()
 
     # 脚本开始
-    input("兄贵挂机脚本（v1.0）即将开始，请确保：\n\
-    1.脚本以管理员权限启动（必须，否则无法操作梦幻模拟战程序）\n\
+    input("简单兄贵挂机脚本（v1.0）即将开始，请确保：\n\
+    1.脚本启动后移开脚本窗口，避开左上角1024*768的区域（那里将会是梦战窗口的地方）\n\
     2.梦幻模拟战程序存在且窗口可见无遮挡（不能是最小化，也不能被遮挡在别的窗口之后）\n\
     3.脚本一旦开始执行后，不要在梦幻模拟战窗口区域移动或点击鼠标干扰脚本执行，最好是什么也不动\n\
     4.要求当前游戏页面为大地图主页面，别的乱七八糟的都不要有\n\
-    5.目前脚本不支持进场以后调动人员，请自行保证上场的两个人不会翻车\n\
+    5.目前脚本不支持进场以后调动人员，请自行保证上场的两个人不会翻车，最好是手动挂过一次以后再执行脚本\n\
     输入回车表示确认以上事项")
 
     inp = input("请输入想要刷的兄贵ID，1-步/2-弓/3-枪/4-飞/5-骑/6-僧，以回车确定：")
