@@ -1,16 +1,19 @@
-# coding=utf-8
+# encoding:gbk
 from PIL import Image
 from PIL import ImageGrab
 import win32api
 import win32gui
 import win32con
-import pytesseract
 import time
-import os
-import cv2
+# import pytesseract
+# import os
+# import cv2
+# import sys
+
+# sys.setdefaultencoding('gbk')
 
 
-# å•å‡»
+# µ¥»÷
 def single_click(x, y):
     win32api.SetCursorPos((x, y))
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN | win32con.MOUSEEVENTF_ABSOLUTE, x, y, 0)
@@ -18,12 +21,12 @@ def single_click(x, y):
     return
 
 
-# å‘ä¸‹æ‹–æ‹½
+# ÏòÏÂÍÏ×§
 def drag_to_bottom(x, y, distance):
     return
 
 
-# å‘ä¸Šæ‹–æ‹½
+# ÏòÉÏÍÏ×§
 def drag_to_top(x, y, distance):
     total = 0
     step = 20
@@ -37,14 +40,14 @@ def drag_to_top(x, y, distance):
     return
 
 
-# è„šæœ¬é€€å‡º
+# ½Å±¾ÍË³ö
 def bat_exit():
-    input("è„šæœ¬æ‰§è¡Œå®Œæ¯•ï¼Œè¾“å…¥å›è½¦ä»¥ç»“æŸ\n")
+    input("½Å±¾Ö´ĞĞÍê±Ï£¬ÊäÈë»Ø³µÒÔ½áÊø\n")
     exit(0)
     return
 
 
-# æŠ“å–æŒ‡å®šä½ç½®å›¾åƒ
+# ×¥È¡Ö¸¶¨Î»ÖÃÍ¼Ïñ
 def grab_pos(left, top, right, bottom):
     size = (left, top, right, bottom)
     img = ImageGrab.grab(size)
@@ -52,7 +55,7 @@ def grab_pos(left, top, right, bottom):
     return
 
 
-# å›¾åƒæ¯”è¾ƒç±»
+# Í¼Ïñ±È½ÏÀà
 class CompareImage:
     @staticmethod
     def calculate(image1, image2):
@@ -89,11 +92,11 @@ class CompareImage:
     @staticmethod
     def compare_image(file_image1, file_image2, size=(256, 256), part_size=(64, 64)):
         '''
-        'file_image1'å’Œ'file_image2'æ˜¯ä¼ å…¥çš„æ–‡ä»¶è·¯å¾„
-         å¯ä»¥é€šè¿‡'Image.open(path)'åˆ›å»º'image1' å’Œ 'image2' Image å¯¹è±¡.
-         'size' é‡æ–°å°† image å¯¹è±¡çš„å°ºå¯¸è¿›è¡Œé‡ç½®ï¼Œé»˜è®¤å¤§å°ä¸º256 * 256 .
-         'part_size' å®šä¹‰äº†åˆ†å‰²å›¾ç‰‡çš„å¤§å°.é»˜è®¤å¤§å°ä¸º64*64 .
-         è¿”å›å€¼æ˜¯ 'image1' å’Œ 'image2'å¯¹æ¯”åçš„ç›¸ä¼¼åº¦ï¼Œç›¸ä¼¼åº¦è¶Šé«˜ï¼Œå›¾ç‰‡è¶Šæ¥è¿‘ï¼Œè¾¾åˆ°1.0è¯´æ˜å›¾ç‰‡å®Œå…¨ç›¸åŒã€‚
+        'file_image1'ºÍ'file_image2'ÊÇ´«ÈëµÄÎÄ¼şÂ·¾¶
+         ¿ÉÒÔÍ¨¹ı'Image.open(path)'´´½¨'image1' ºÍ 'image2' Image ¶ÔÏó.
+         'size' ÖØĞÂ½« image ¶ÔÏóµÄ³ß´ç½øĞĞÖØÖÃ£¬Ä¬ÈÏ´óĞ¡Îª256 * 256 .
+         'part_size' ¶¨ÒåÁË·Ö¸îÍ¼Æ¬µÄ´óĞ¡.Ä¬ÈÏ´óĞ¡Îª64*64 .
+         ·µ»ØÖµÊÇ 'image1' ºÍ 'image2'¶Ô±ÈºóµÄÏàËÆ¶È£¬ÏàËÆ¶ÈÔ½¸ß£¬Í¼Æ¬Ô½½Ó½ü£¬´ïµ½1.0ËµÃ÷Í¼Æ¬ÍêÈ«ÏàÍ¬¡£
         '''
 
         image1 = Image.open(file_image1)
@@ -114,52 +117,52 @@ class CompareImage:
 
         pre = round((sub_data / (x * y)), 6)
         # print(str(pre * 100) + '%')
-        print('å›¾åƒå¯¹æ¯”ç»“æœ: ' + str(pre))
+        print('Í¼Ïñ¶Ô±È½á¹û: ' + str(pre))
         return pre
 
 
-# # æå–å›¾åƒæ–‡å­—
+# # ÌáÈ¡Í¼ÏñÎÄ×Ö
 # def get_text_from_img():
-#     # åˆå§‹åŒ–tesseract
+#     # ³õÊ¼»¯tesseract
 #     pytesseract.pytesseract.tesseract_cmd = 'D:\\Program Files\\Tesseract-OCR\\tesseract'
 #     img_text = pytesseract.image_to_string(Image.open("grab.png"), lang="chi_sim")
 #     img_text = img_text.replace(" ", "")
 #     return img_text
 
 
-def calculate(image1, image2):
-    # ç°åº¦ç›´æ–¹å›¾ç®—æ³•
-    # è®¡ç®—å•é€šé“çš„ç›´æ–¹å›¾çš„ç›¸ä¼¼å€¼
-    hist1 = cv2.calcHist([image1], [0], None, [256], [0.0, 255.0])
-    hist2 = cv2.calcHist([image2], [0], None, [256], [0.0, 255.0])
-    # è®¡ç®—ç›´æ–¹å›¾çš„é‡åˆåº¦
-    degree = 0
-    for i in range(len(hist1)):
-        if hist1[i] != hist2[i]:
-            degree = degree + \
-                (1 - abs(hist1[i] - hist2[i]) / max(hist1[i], hist2[i]))
-    else:
-        degree = degree + 1
-    degree = degree / len(hist1)
-    return degree
+# def calculate(image1, image2):
+#     # »Ò¶ÈÖ±·½Í¼Ëã·¨
+#     # ¼ÆËãµ¥Í¨µÀµÄÖ±·½Í¼µÄÏàËÆÖµ
+#     hist1 = cv2.calcHist([image1], [0], None, [256], [0.0, 255.0])
+#     hist2 = cv2.calcHist([image2], [0], None, [256], [0.0, 255.0])
+#     # ¼ÆËãÖ±·½Í¼µÄÖØºÏ¶È
+#     degree = 0
+#     for i in range(len(hist1)):
+#         if hist1[i] != hist2[i]:
+#             degree = degree + \
+#                 (1 - abs(hist1[i] - hist2[i]) / max(hist1[i], hist2[i]))
+#     else:
+#         degree = degree + 1
+#     degree = degree / len(hist1)
+#     return degree
 
 
-def classify_hist_with_split(image1, image2, size=(256, 256)):
-    # RGBæ¯ä¸ªé€šé“çš„ç›´æ–¹å›¾ç›¸ä¼¼åº¦
-    # å°†å›¾åƒresizeåï¼Œåˆ†ç¦»ä¸ºRGBä¸‰ä¸ªé€šé“ï¼Œå†è®¡ç®—æ¯ä¸ªé€šé“çš„ç›¸ä¼¼å€¼
-    image1 = cv2.resize(image1, size)
-    image2 = cv2.resize(image2, size)
-    sub_image1 = cv2.split(image1)
-    sub_image2 = cv2.split(image2)
-    sub_data = 0
-    for im1, im2 in zip(sub_image1, sub_image2):
-        sub_data += calculate(im1, im2)
-    sub_data = sub_data / 3
-    return sub_data
+# def classify_hist_with_split(image1, image2, size=(256, 256)):
+#     # RGBÃ¿¸öÍ¨µÀµÄÖ±·½Í¼ÏàËÆ¶È
+#     # ½«Í¼Ïñresizeºó£¬·ÖÀëÎªRGBÈı¸öÍ¨µÀ£¬ÔÙ¼ÆËãÃ¿¸öÍ¨µÀµÄÏàËÆÖµ
+#     image1 = cv2.resize(image1, size)
+#     image2 = cv2.resize(image2, size)
+#     sub_image1 = cv2.split(image1)
+#     sub_image2 = cv2.split(image2)
+#     sub_data = 0
+#     for im1, im2 in zip(sub_image1, sub_image2):
+#         sub_data += calculate(im1, im2)
+#     sub_data = sub_data / 3
+#     return sub_data
 
 
 def image_binarization(img_path, threshold):
-    # å›¾åƒäºŒå€¼åŒ–
+    # Í¼Ïñ¶şÖµ»¯
     img = Image.open(img_path)
     img = img.convert('L')
     img.save("grey.jpg")
@@ -171,249 +174,250 @@ def image_binarization(img_path, threshold):
         else:
             table.append(1)
 
-    # å›¾ç‰‡äºŒå€¼åŒ–
+    # Í¼Æ¬¶şÖµ»¯
     img = img.point(table, '1')
     img.save("binarization.jpg")
 
 
-# ä¸€äº›é¢„å®šä¹‰æ•°å€¼
-target_xg_id = 5
-target_round = 0
-start_pc = 120
-start_hb = 10
-start_time = time.time()
-success_round = 0
-eat_bg = 0
+def bat_main():
+    # Ò»Ğ©²âÊÔÊ±Ô¤¶¨ÒåµÄÊıÖµ
+    target_xg_id = 5
+    target_round = 0
+    start_pc = 120
+    start_hb = 10
+    start_time = time.time()
+    success_round = 0
+    eat_bg = 0
 
-# æµ‹è¯•ä»£ç 
-# grab_pos(652, 359, 755, 389)
-# grab_pos(445, 236, 573, 270)
-# image_binarization("grab.jpg", 200)
-# img1 = cv2.imread("grey.jpg")
-# img2 = cv2.imread("grey1.jpg")
-# print(classify_hist_with_split(img1, img2))
-# CompareImage.compare_image("grey.jpg", "grey1.jpg")
-# CompareImage.compare_image("grey.jpg", "grey2.jpg")
-# img1 = cv2.imread("binarization.jpg")
-# img2 = cv2.imread("binarization1.jpg")
-# print(classify_hist_with_split(img1, img2))
-# CompareImage.compare_image("binarization.jpg", "binarization1.jpg")
-# bat_exit()
+    # ²âÊÔ´úÂë
+    # grab_pos(652, 359, 755, 389)
+    # grab_pos(445, 236, 573, 270)
+    # image_binarization("grab.jpg", 200)
+    # img1 = cv2.imread("grey.jpg")
+    # img2 = cv2.imread("grey1.jpg")
+    # print(classify_hist_with_split(img1, img2))
+    # CompareImage.compare_image("grey.jpg", "grey1.jpg")
+    # CompareImage.compare_image("grey.jpg", "grey2.jpg")
+    # img1 = cv2.imread("binarization.jpg")
+    # img2 = cv2.imread("binarization1.jpg")
+    # print(classify_hist_with_split(img1, img2))
+    # CompareImage.compare_image("binarization.jpg", "binarization1.jpg")
+    # bat_exit()
 
-# è„šæœ¬å¼€å§‹
-input("å…„è´µæŒ‚æœºè„šæœ¬ï¼ˆv1.0ï¼‰å³å°†å¼€å§‹ï¼Œè¯·ç¡®ä¿ï¼š\n\
-1.è„šæœ¬ä»¥ç®¡ç†å‘˜æƒé™å¯åŠ¨ï¼ˆå¿…é¡»ï¼Œå¦åˆ™æ— æ³•æ“ä½œæ¢¦å¹»æ¨¡æ‹Ÿæˆ˜ç¨‹åºï¼‰\n\
-2.æ¢¦å¹»æ¨¡æ‹Ÿæˆ˜ç¨‹åºå­˜åœ¨ä¸”çª—å£å¯è§æ— é®æŒ¡ï¼ˆä¸èƒ½æ˜¯æœ€å°åŒ–ï¼Œä¹Ÿä¸èƒ½è¢«é®æŒ¡åœ¨åˆ«çš„çª—å£ä¹‹åï¼‰\n\
-3.è„šæœ¬ä¸€æ—¦å¼€å§‹æ‰§è¡Œåï¼Œä¸è¦åœ¨æ¢¦å¹»æ¨¡æ‹Ÿæˆ˜çª—å£åŒºåŸŸç§»åŠ¨æˆ–ç‚¹å‡»é¼ æ ‡å¹²æ‰°è„šæœ¬æ‰§è¡Œï¼Œæœ€å¥½æ˜¯ä»€ä¹ˆä¹Ÿä¸åŠ¨\n\
-4.è¦æ±‚å½“å‰æ¸¸æˆé¡µé¢ä¸ºå¤§åœ°å›¾ä¸»é¡µé¢ï¼Œåˆ«çš„ä¹±ä¸ƒå…«ç³Ÿçš„éƒ½ä¸è¦æœ‰\n\
-5.ç›®å‰è„šæœ¬ä¸æ”¯æŒè¿›åœºä»¥åè°ƒåŠ¨äººå‘˜ï¼Œè¯·è‡ªè¡Œä¿è¯ä¸Šåœºçš„ä¸¤ä¸ªäººä¸ä¼šç¿»è½¦\n\
-è¾“å…¥å›è½¦è¡¨ç¤ºç¡®è®¤ä»¥ä¸Šäº‹é¡¹")
+    # ½Å±¾¿ªÊ¼
+    input("ĞÖ¹ó¹Ò»ú½Å±¾£¨v1.0£©¼´½«¿ªÊ¼£¬ÇëÈ·±££º\n\
+    1.½Å±¾ÒÔ¹ÜÀíÔ±È¨ÏŞÆô¶¯£¨±ØĞë£¬·ñÔòÎŞ·¨²Ù×÷ÃÎ»ÃÄ£ÄâÕ½³ÌĞò£©\n\
+    2.ÃÎ»ÃÄ£ÄâÕ½³ÌĞò´æÔÚÇÒ´°¿Ú¿É¼ûÎŞÕÚµ²£¨²»ÄÜÊÇ×îĞ¡»¯£¬Ò²²»ÄÜ±»ÕÚµ²ÔÚ±ğµÄ´°¿ÚÖ®ºó£©\n\
+    3.½Å±¾Ò»µ©¿ªÊ¼Ö´ĞĞºó£¬²»ÒªÔÚÃÎ»ÃÄ£ÄâÕ½´°¿ÚÇøÓòÒÆ¶¯»òµã»÷Êó±ê¸ÉÈÅ½Å±¾Ö´ĞĞ£¬×îºÃÊÇÊ²Ã´Ò²²»¶¯\n\
+    4.ÒªÇóµ±Ç°ÓÎÏ·Ò³ÃæÎª´óµØÍ¼Ö÷Ò³Ãæ£¬±ğµÄÂÒÆß°ËÔãµÄ¶¼²»ÒªÓĞ\n\
+    5.Ä¿Ç°½Å±¾²»Ö§³Ö½ø³¡ÒÔºóµ÷¶¯ÈËÔ±£¬Çë×ÔĞĞ±£Ö¤ÉÏ³¡µÄÁ½¸öÈË²»»á·­³µ\n\
+    ÊäÈë»Ø³µ±íÊ¾È·ÈÏÒÔÉÏÊÂÏî")
 
-inp = input("è¯·è¾“å…¥æƒ³è¦åˆ·çš„å…„è´µIDï¼Œ1-æ­¥/2-å¼“/3-æª/4-é£/5-éª‘/6-åƒ§ï¼Œä»¥å›è½¦ç¡®å®šï¼š")
-target_xg_id = int(inp)
-if target_xg_id != 1 and target_xg_id != 2 and target_xg_id != 3 \
-        and target_xg_id != 4 and target_xg_id != 5 and target_xg_id != 6:
-    print("è¾“å…¥çš„å…„è´µIDé”™è¯¯ï¼Œå…„è´µIDåªèƒ½æ˜¯1-6ä¹‹é—´çš„æ•°å­—")
-    bat_exit()
+    inp = input("ÇëÊäÈëÏëÒªË¢µÄĞÖ¹óID£¬1-²½/2-¹­/3-Ç¹/4-·É/5-Æï/6-É®£¬ÒÔ»Ø³µÈ·¶¨£º")
+    target_xg_id = int(inp)
+    if target_xg_id != 1 and target_xg_id != 2 and target_xg_id != 3 \
+            and target_xg_id != 4 and target_xg_id != 5 and target_xg_id != 6:
+        print("ÊäÈëµÄĞÖ¹óID´íÎó£¬ĞÖ¹óIDÖ»ÄÜÊÇ1-6Ö®¼äµÄÊı×Ö")
+        bat_exit()
 
-inp = input("è¯·è¾“å…¥æƒ³è¦åˆ·çš„æ¬¡æ•°ï¼Œè¾“å…¥0è¡¨ç¤ºä¸€ç›´åˆ·åˆ°æ²¡æœ‰ä½“åŠ›ï¼Œä»¥å›è½¦ç¡®å®šï¼š")
-target_round = int(inp)
-if target_round < 0:
-    print("è¾“å…¥çš„æ¬¡æ•°é”™è¯¯ï¼Œæ¬¡æ•°åªèƒ½æ˜¯0åŠä»¥ä¸Šçš„æ•°å­—")
-    bat_exit()
+    inp = input("ÇëÊäÈëÏëÒªË¢µÄ´ÎÊı£¬ÊäÈë0±íÊ¾Ò»Ö±Ë¢µ½Ã»ÓĞÌåÁ¦£¬ÒÔ»Ø³µÈ·¶¨£º")
+    target_round = int(inp)
+    if target_round < 0:
+        print("ÊäÈëµÄ´ÎÊı´íÎó£¬´ÎÊıÖ»ÄÜÊÇ0¼°ÒÔÉÏµÄÊı×Ö")
+        bat_exit()
 
-inp = input("è¯·è¾“å…¥å½“å‰ä½“åŠ›ï¼Œä»¥å›è½¦ç¡®å®šï¼š")
-start_pc = int(inp)
-if start_pc < 0:
-    print("è¾“å…¥çš„ä½“åŠ›é”™è¯¯ï¼Œä½“åŠ›åªèƒ½æ˜¯0åŠä»¥ä¸Šçš„æ•°å­—")
-    bat_exit()
+    inp = input("ÇëÊäÈëµ±Ç°ÌåÁ¦£¬ÒÔ»Ø³µÈ·¶¨£º")
+    start_pc = int(inp)
+    if start_pc < 0:
+        print("ÊäÈëµÄÌåÁ¦´íÎó£¬ÌåÁ¦Ö»ÄÜÊÇ0¼°ÒÔÉÏµÄÊı×Ö")
+        bat_exit()
 
-inp = input("è¯·è¾“å…¥å½“å‰æ±‰å ¡æ•°é‡ï¼Œä»¥å›è½¦ç¡®å®šï¼š")
-start_hb = int(inp)
-if start_hb < 0:
-    print("è¾“å…¥çš„æ±‰å ¡æ•°é‡é”™è¯¯ï¼Œæ±‰å ¡æ•°é‡åªèƒ½æ˜¯0åŠä»¥ä¸Šçš„æ•°å­—")
-    bat_exit()
+    inp = input("ÇëÊäÈëµ±Ç°ºº±¤ÊıÁ¿£¬ÒÔ»Ø³µÈ·¶¨£º")
+    start_hb = int(inp)
+    if start_hb < 0:
+        print("ÊäÈëµÄºº±¤ÊıÁ¿´íÎó£¬ºº±¤ÊıÁ¿Ö»ÄÜÊÇ0¼°ÒÔÉÏµÄÊı×Ö")
+        bat_exit()
 
-print("æƒ³è¦åˆ·çš„å…„è´µæ˜¯ï¼š" + str(target_xg_id))
-print("æƒ³è¦åˆ·çš„æ¬¡æ•°æ˜¯ï¼š" + str(target_round))
-print("å½“å‰ä½“åŠ›ä¸ºï¼š" + str(start_pc))
-print("å½“å‰æ±‰å ¡ä¸ºï¼š" + str(start_hb))
-input("è¾“å…¥å›è½¦è¡¨ç¤ºç¡®è®¤")
+    print("ÏëÒªË¢µÄĞÖ¹óÊÇ£º" + str(target_xg_id))
+    print("ÏëÒªË¢µÄ´ÎÊıÊÇ£º" + str(target_round))
+    print("µ±Ç°ÌåÁ¦Îª£º" + str(start_pc))
+    print("µ±Ç°ºº±¤Îª£º" + str(start_hb))
+    input("ÊäÈë»Ø³µ±íÊ¾È·ÈÏ")
 
-start_time = time.time()
+    start_time = time.time()
 
-print("\nè„šæœ¬æ­£å¼å¼€å§‹")
-win32api.Sleep(1000)
-print("\næŸ¥æ‰¾æ¢¦å¹»æ¨¡æ‹Ÿæˆ˜çª—å£")
-handle_lan = win32gui.FindWindow("UnityWndClass", "æ¢¦å¹»æ¨¡æ‹Ÿæˆ˜")
-if handle_lan == 0:
-    print("æ— æ³•æŸ¥æ‰¾åˆ°æ¢¦å¹»æ¨¡æ‹Ÿæˆ˜çª—å£ï¼Œè„šæœ¬å³å°†é€€å‡º")
-    bat_exit()
-else:
-    print("æŸ¥æ‰¾åˆ°æ¢¦å¹»æ¨¡æ‹Ÿæˆ˜çª—å£:" + str(handle_lan))
+    print("\n½Å±¾ÕıÊ½¿ªÊ¼")
     win32api.Sleep(1000)
-
-print("å°†çª—å£ç§»åŠ¨åˆ°0,0,1024,768")
-win32gui.SetWindowPos(handle_lan, win32con.HWND_TOPMOST, 0, 0, 1024, 768, win32con.SWP_NOZORDER)
-win32api.Sleep(1000)
-
-print("ç‚¹å‡»ç§˜å¢ƒ")
-single_click(977, 303)
-win32api.Sleep(2000)
-
-print("ç‚¹å‡»å…„è´µå¥èº«æˆ¿")
-single_click(530, 160)
-win32api.Sleep(2000)
-
-while True:
-    print("æ£€æŸ¥å½“å‰ä½“åŠ›æ˜¯å¦è¶³å¤Ÿï¼ˆæ£€æŸ¥ä½“åŠ›ä¼šæœ‰äº›è®¸è¯¯å·®ï¼‰")
-    time_div = time.time() - start_time
-    pc_grow = time_div / 300
-    current_pc = int(start_pc + pc_grow + eat_bg * 50 - success_round * 16)
-    if current_pc < 16:
-        print("å½“å‰ä½“åŠ›ä¸ºï¼š" + str(current_pc) + ",éœ€è¦åƒæ±‰å ¡")
-        win32api.Sleep(1000)
-        if eat_bg >= start_hb:
-            print("å½“å‰æ±‰å ¡ä¸è¶³")
-            bat_exit()
-        print("ç‚¹å‡»ä½“åŠ›+å·")
-        single_click(764, 50)
-        win32api.Sleep(1000)
-        print("ç‚¹å‡»æ±‰å ¡")
-        single_click(420, 469)
-        win32api.Sleep(2000)
-        print("ç‚¹å‡»ç©ºç™½æ¶ˆé™¤æ±‰å ¡å¯¹è¯æ¡†")
-        single_click(267, 118)
-        win32api.Sleep(1000)
-    else:
-        print("å½“å‰ä½“åŠ›ä¸ºï¼š" + str(current_pc) + ",è¶³å¤Ÿç»§ç»­")
-        win32api.Sleep(1000)
-
-    while True:
-        print("ç‚¹å‡»å¯¹åº”å…„è´µ")
-        if target_xg_id == 1:
-            single_click(219, 228)
-        elif target_xg_id == 2:
-            single_click(97, 306) # è¿™ä¸ªä½ç½®æ˜¯å®¹æ˜“è¢«é‚€è¯·é®æŒ¡çš„ä½ç½®ï¼Œæ•…å®šä½é å·¦ä¸€ç‚¹
-        elif target_xg_id == 3:
-            single_click(219, 389)
-        elif target_xg_id == 4:
-            single_click(219, 465)
-        elif target_xg_id == 5:
-            single_click(219, 552)
-        elif target_xg_id == 6:
-            single_click(219, 630)
-        win32api.Sleep(1000)
-
-        print("ç‚¹å‡»ç»„é˜Ÿ")
-        single_click(958, 700)
-        win32api.Sleep(3000)
-
-        print("å‘ä¸Šæ‹–æ‹½åˆ—è¡¨")
-        drag_to_top(375, 500, 250)
-        win32api.Sleep(2000)
-
-        print("é€‰ä¸­LV.70")
-        single_click(371, 638)
-        win32api.Sleep(2000)
-
-        print("ç‚¹å‡»åˆ›å»ºé˜Ÿä¼")
-        single_click(870, 700)
-        win32api.Sleep(2000)
-
-        print("ç‚¹å‡»åˆ›å»º")
-        single_click(652, 585)
-        win32api.Sleep(2000)
-
-        print("å¾ªç¯æ£€æµ‹ä¸‰å·ä½æ˜¯å¦å­˜åœ¨")
-        check_pos_3_timeout = False
-        check_pso_3_start_time = time.time()
-        # index = 0
-        while True:
-            time_div_check_3 = time.time() - check_pso_3_start_time
-            if time_div_check_3 > 120:
-                print("ä¸‰å·ä½æ£€æµ‹è¶…æ—¶ï¼Œé€€å‡ºæ£€æµ‹å¾ªç¯")
-                check_pos_3_timeout = True
-                break
-            print("ç‚¹å‡»ä¸‰å·ä½ä½ç½®")
-            single_click(779, 282)
-            win32api.Sleep(1500)
-            print("æˆªå±å½“å‰ä½ç½®")
-            grab_pos(652, 359, 755, 389)
-            image_binarization("grab.jpg", 200)
-            print("æ¯”å¯¹é¢„ç•™å›¾åƒ")
-            com_ret = CompareImage.compare_image("grey.jpg", "grey1.jpg")
-            # com_ret = CompareImage.compare_image("grab.jpg", "1.jpg")
-            # com_ret = classify_hist_with_split("grab.jpg", "1.jpg")
-            # os.rename("grab.jpg", "grab" + str(index) + ".jpg")
-            # index = index + 1
-            if com_ret > 0.9:
-                print("æ¯”å¯¹æˆåŠŸï¼Œä¸‰å·ä½å­˜åœ¨")
-                print("ç‚¹å‡»ç©ºç™½å¤„æ¶ˆé™¤ä¸‰å·ä½èµ„æ–™æ¡†")
-                single_click(787, 171)
-                win32api.Sleep(1000)
-                print("ç‚¹å‡»å¼€å§‹æˆ˜æ–—")
-                single_click(835, 586)
-                win32api.Sleep(5000)
-                break
-            else:
-                print("æ¯”å¯¹ä¸æˆåŠŸï¼Œä¸‰å·ä½ä¸å­˜åœ¨")
-                print("1ç§’åç»§ç»­å°è¯•æ¯”å¯¹")
-                win32api.Sleep(1000)
-
-        if check_pos_3_timeout:
-            win32api.Sleep(5000)
-            print("ç‚¹å‡»è¿”å›")
-            single_click(83, 59)
-            win32api.Sleep(1000)
-        else:
-            break
-
-    print("æˆ˜æ–—å¼€å§‹")
-    print("ç‚¹å‡»å‡ºå‡»")
-    single_click(957, 700)
-    battle_start_time = time.time()
-    while True:
-        win32api.Sleep(3000)
-        battle_last_time = time.time() - battle_start_time
-        if success_round == 0 and battle_last_time < 60:
-            print("ç¬¬ä¸€æ¬¡åˆ·ï¼Œåœ¨60ç§’å†…å®šæ—¶ç‚¹å‡»è‡ªåŠ¨")
-            single_click(977, 232)
-            win32api.Sleep(1000)
-
-        if battle_last_time > 240:
-            print("æˆ˜æ–—å·²è¶…è¿‡å››åˆ†é’Ÿï¼Œæˆªå±æˆ˜æ–—ç»“ç®—åŒºåŸŸ")
-            grab_pos(445, 236, 573, 270)
-            image_binarization("grab.jpg", 200)
-            print("æ¯”å¯¹é¢„ç•™å›¾åƒ")
-            # com_ret = CompareImage.compare_image("grab.jpg", "2.jpg")
-            com_ret = CompareImage.compare_image("grey.jpg", "grey2.jpg")
-            if com_ret > 0.9:
-                print("æ¯”å¯¹æˆåŠŸï¼Œæˆ˜æ–—å·²ç»“æŸ")
-                win32api.Sleep(5000)
-                print("ç‚¹å‡»ç©ºç™½å¤„æ¶ˆé™¤æˆ˜æ–—ç»“ç®—æ¡†")
-                single_click(542, 110)
-                win32api.Sleep(3000)
-                print("ç‚¹å‡»ç©ºç™½å¤„æ‰“å¼€å®ç®±")
-                single_click(542, 110)
-                win32api.Sleep(4000)
-                print("ç‚¹å‡»ç©ºç™½å¤„æ‰“å¼€æ¯æ—¥å¥–åŠ±ï¼ˆå¯èƒ½æœ‰ï¼Œå¯èƒ½æ²¡æœ‰ï¼Œä¸å½±å“ï¼Œå¤šç‚¹ä¸€æ¬¡ç©ºç™½è€Œå·²ï¼‰")
-                single_click(542, 110)
-                win32api.Sleep(4000)
-                print("ç‚¹å‡»ç©ºç™½å¤„ç»§ç»­")
-                single_click(542, 110)
-                win32api.Sleep(3000)
-                print("ç‚¹å‡»å–æ¶ˆé‚€è¯·")
-                single_click(432, 470)
-                win32api.Sleep(5000)
-                success_round = success_round + 1
-                break
-
-    print("æˆ˜æ–—ç»“æŸï¼Œæ€»æˆ˜æ–—æ¬¡æ•°ä¸ºï¼š" + str(success_round))
-    if target_round != 0 and success_round >= target_round:
-        print("æˆ˜æ–—æ¬¡æ•°å·²è¾¾ç›®æ ‡å€¼ï¼Œè„šæœ¬å³å°†é€€å‡º")
+    print("\n²éÕÒÃÎ»ÃÄ£ÄâÕ½´°¿Ú")
+    handle_lan = win32gui.FindWindow("UnityWndClass", "ÃÎ»ÃÄ£ÄâÕ½")
+    if handle_lan == 0:
+        print("ÎŞ·¨²éÕÒµ½ÃÎ»ÃÄ£ÄâÕ½´°¿Ú£¬½Å±¾¼´½«ÍË³ö")
         bat_exit()
     else:
-        print("å¼€å§‹ä¸‹ä¸€è½®æˆ˜æ–—")
+        print("²éÕÒµ½ÃÎ»ÃÄ£ÄâÕ½´°¿Ú:" + str(handle_lan))
+        win32api.Sleep(1000)
 
-bat_exit()
+    print("½«´°¿ÚÒÆ¶¯µ½0,0,1024,768")
+    win32gui.SetWindowPos(handle_lan, win32con.HWND_TOPMOST, 0, 0, 1024, 768, win32con.SWP_NOZORDER)
+    win32api.Sleep(1000)
+
+    print("µã»÷ÃØ¾³")
+    single_click(977, 303)
+    win32api.Sleep(2000)
+
+    print("µã»÷ĞÖ¹ó½¡Éí·¿")
+    single_click(530, 160)
+    win32api.Sleep(2000)
+
+    while True:
+        print("¼ì²éµ±Ç°ÌåÁ¦ÊÇ·ñ×ã¹»£¨¼ì²éÌåÁ¦»áÓĞĞ©ĞíÎó²î£©")
+        time_div = time.time() - start_time
+        pc_grow = time_div / 300
+        current_pc = int(start_pc + pc_grow + eat_bg * 50 - success_round * 16)
+        if current_pc < 16:
+            print("µ±Ç°ÌåÁ¦Îª£º" + str(current_pc) + ",ĞèÒª³Ôºº±¤")
+            win32api.Sleep(1000)
+            if eat_bg >= start_hb:
+                print("µ±Ç°ºº±¤²»×ã")
+                bat_exit()
+            print("µã»÷ÌåÁ¦+ºÅ")
+            single_click(764, 50)
+            win32api.Sleep(1000)
+            print("µã»÷ºº±¤")
+            single_click(420, 469)
+            win32api.Sleep(2000)
+            print("µã»÷¿Õ°×Ïû³ıºº±¤¶Ô»°¿ò")
+            single_click(267, 118)
+            win32api.Sleep(1000)
+        else:
+            print("µ±Ç°ÌåÁ¦Îª£º" + str(current_pc) + ",×ã¹»¼ÌĞø")
+            win32api.Sleep(1000)
+
+        while True:
+            print("µã»÷¶ÔÓ¦ĞÖ¹ó")
+            if target_xg_id == 1:
+                single_click(219, 228)
+            elif target_xg_id == 2:
+                single_click(97, 306) # Õâ¸öÎ»ÖÃÊÇÈİÒ×±»ÑûÇëÕÚµ²µÄÎ»ÖÃ£¬¹Ê¶¨Î»¿¿×óÒ»µã
+            elif target_xg_id == 3:
+                single_click(219, 389)
+            elif target_xg_id == 4:
+                single_click(219, 465)
+            elif target_xg_id == 5:
+                single_click(219, 552)
+            elif target_xg_id == 6:
+                single_click(219, 630)
+            win32api.Sleep(1000)
+
+            print("µã»÷×é¶Ó")
+            single_click(958, 700)
+            win32api.Sleep(3000)
+
+            print("ÏòÉÏÍÏ×§ÁĞ±í")
+            drag_to_top(375, 500, 250)
+            win32api.Sleep(2000)
+
+            print("Ñ¡ÖĞLV.70")
+            single_click(371, 638)
+            win32api.Sleep(2000)
+
+            print("µã»÷´´½¨¶ÓÎé")
+            single_click(870, 700)
+            win32api.Sleep(2000)
+
+            print("µã»÷´´½¨")
+            single_click(652, 585)
+            win32api.Sleep(2000)
+
+            print("Ñ­»·¼ì²âÈıºÅÎ»ÊÇ·ñ´æÔÚ")
+            check_pos_3_timeout = False
+            check_pso_3_start_time = time.time()
+            # index = 0
+            while True:
+                time_div_check_3 = time.time() - check_pso_3_start_time
+                if time_div_check_3 > 120:
+                    print("ÈıºÅÎ»¼ì²â³¬Ê±£¬ÍË³ö¼ì²âÑ­»·")
+                    check_pos_3_timeout = True
+                    break
+                print("µã»÷ÈıºÅÎ»Î»ÖÃ")
+                single_click(779, 282)
+                win32api.Sleep(1500)
+                print("½ØÆÁµ±Ç°Î»ÖÃ")
+                grab_pos(652, 359, 755, 389)
+                image_binarization("grab.jpg", 200)
+                print("±È¶ÔÔ¤ÁôÍ¼Ïñ")
+                com_ret = CompareImage.compare_image("grey.jpg", "grey1.jpg")
+                # com_ret = CompareImage.compare_image("grab.jpg", "1.jpg")
+                # com_ret = classify_hist_with_split("grab.jpg", "1.jpg")
+                # os.rename("grab.jpg", "grab" + str(index) + ".jpg")
+                # index = index + 1
+                if com_ret > 0.9:
+                    print("±È¶Ô³É¹¦£¬ÈıºÅÎ»´æÔÚ")
+                    print("µã»÷¿Õ°×´¦Ïû³ıÈıºÅÎ»×ÊÁÏ¿ò")
+                    single_click(787, 171)
+                    win32api.Sleep(1000)
+                    print("µã»÷¿ªÊ¼Õ½¶·")
+                    single_click(835, 586)
+                    win32api.Sleep(5000)
+                    break
+                else:
+                    print("±È¶Ô²»³É¹¦£¬ÈıºÅÎ»²»´æÔÚ")
+                    print("1Ãëºó¼ÌĞø³¢ÊÔ±È¶Ô")
+                    win32api.Sleep(1000)
+
+            if check_pos_3_timeout:
+                win32api.Sleep(5000)
+                print("µã»÷·µ»Ø")
+                single_click(83, 59)
+                win32api.Sleep(1000)
+            else:
+                break
+
+        print("Õ½¶·¿ªÊ¼")
+        print("µã»÷³ö»÷")
+        single_click(957, 700)
+        battle_start_time = time.time()
+        while True:
+            win32api.Sleep(3000)
+            battle_last_time = time.time() - battle_start_time
+            if success_round == 0 and battle_last_time < 60:
+                print("µÚÒ»´ÎË¢£¬ÔÚ60ÃëÄÚ¶¨Ê±µã»÷×Ô¶¯")
+                single_click(977, 232)
+                win32api.Sleep(1000)
+
+            if battle_last_time > 240:
+                print("Õ½¶·ÒÑ³¬¹ıËÄ·ÖÖÓ£¬½ØÆÁÕ½¶·½áËãÇøÓò")
+                grab_pos(445, 236, 573, 270)
+                image_binarization("grab.jpg", 200)
+                print("±È¶ÔÔ¤ÁôÍ¼Ïñ")
+                # com_ret = CompareImage.compare_image("grab.jpg", "2.jpg")
+                com_ret = CompareImage.compare_image("grey.jpg", "grey2.jpg")
+                if com_ret > 0.9:
+                    print("±È¶Ô³É¹¦£¬Õ½¶·ÒÑ½áÊø")
+                    win32api.Sleep(5000)
+                    print("µã»÷¿Õ°×´¦Ïû³ıÕ½¶·½áËã¿ò")
+                    single_click(542, 110)
+                    win32api.Sleep(3000)
+                    print("µã»÷¿Õ°×´¦´ò¿ª±¦Ïä")
+                    single_click(542, 110)
+                    win32api.Sleep(4000)
+                    print("µã»÷¿Õ°×´¦´ò¿ªÃ¿ÈÕ½±Àø£¨¿ÉÄÜÓĞ£¬¿ÉÄÜÃ»ÓĞ£¬²»Ó°Ïì£¬¶àµãÒ»´Î¿Õ°×¶øÒÑ£©")
+                    single_click(542, 110)
+                    win32api.Sleep(4000)
+                    print("µã»÷¿Õ°×´¦¼ÌĞø")
+                    single_click(542, 110)
+                    win32api.Sleep(3000)
+                    print("µã»÷È¡ÏûÑûÇë")
+                    single_click(432, 470)
+                    win32api.Sleep(5000)
+                    success_round = success_round + 1
+                    break
+
+        print("Õ½¶·½áÊø£¬×ÜÕ½¶·´ÎÊıÎª£º" + str(success_round))
+        if target_round != 0 and success_round >= target_round:
+            print("Õ½¶·´ÎÊıÒÑ´ïÄ¿±êÖµ£¬½Å±¾¼´½«ÍË³ö")
+            bat_exit()
+        else:
+            print("¿ªÊ¼ÏÂÒ»ÂÖÕ½¶·")
+
+    bat_exit()
