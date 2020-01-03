@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b9a69cd3-d94d-401e-b0b6-d38f4915ae28" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/start.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/testpy1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/testpy1.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/1.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mytest.py" beforeDir="false" afterPath="$PROJECT_DIR$/mytest.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -22,6 +24,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1VeqesTHwizKAnKC5JRRbcmCbhn" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -34,7 +39,7 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunManager">
-    <configuration name="mytest" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="start" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="testpy1" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -46,7 +51,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/mytest.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/start.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -57,7 +62,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.mytest" />
+        <item itemvalue="Python.start" />
       </list>
     </recent_temporary>
   </component>
@@ -87,30 +92,39 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="739" y="262" key="FileChooserDialogImpl" timestamp="1577848609761">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="550" y="171" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578041394881">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="550" y="171" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1578041394881" />
+    <state x="739" y="265" key="FileChooserDialogImpl" timestamp="1578024330117">
+      <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="739" y="262" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1577848609761" />
-    <state width="872" height="220" key="GridCell.Tab.0.bottom" timestamp="1577978312017">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="739" y="265" key="FileChooserDialogImpl/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1578024330117" />
+    <state width="1362" height="285" key="GridCell.Tab.0.bottom" timestamp="1578047893209">
+      <screen x="1920" y="0" width="1920" height="1050" />
     </state>
     <state width="872" height="220" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1577978312017" />
-    <state width="1899" height="285" key="GridCell.Tab.0.bottom/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1577786781470" />
-    <state width="872" height="220" key="GridCell.Tab.0.center" timestamp="1577978312017">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1362" height="285" key="GridCell.Tab.0.bottom/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1578041783496" />
+    <state width="1362" height="285" key="GridCell.Tab.0.bottom/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1578047893209" />
+    <state width="1362" height="285" key="GridCell.Tab.0.center" timestamp="1578047893209">
+      <screen x="1920" y="0" width="1920" height="1050" />
     </state>
     <state width="872" height="220" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1577978312017" />
-    <state width="1899" height="285" key="GridCell.Tab.0.center/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1577786781470" />
-    <state width="872" height="220" key="GridCell.Tab.0.left" timestamp="1577978312017">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1362" height="285" key="GridCell.Tab.0.center/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1578041783496" />
+    <state width="1362" height="285" key="GridCell.Tab.0.center/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1578047893209" />
+    <state width="1362" height="285" key="GridCell.Tab.0.left" timestamp="1578047893207">
+      <screen x="1920" y="0" width="1920" height="1050" />
     </state>
     <state width="872" height="220" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1577978312017" />
-    <state width="1899" height="285" key="GridCell.Tab.0.left/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1577786781470" />
-    <state width="872" height="220" key="GridCell.Tab.0.right" timestamp="1577978312017">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1362" height="285" key="GridCell.Tab.0.left/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1578041783496" />
+    <state width="1362" height="285" key="GridCell.Tab.0.left/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1578047893207" />
+    <state width="1362" height="285" key="GridCell.Tab.0.right" timestamp="1578047893209">
+      <screen x="1920" y="0" width="1920" height="1050" />
     </state>
     <state width="872" height="220" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1577978312017" />
-    <state width="1899" height="285" key="GridCell.Tab.0.right/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1577786781470" />
+    <state width="1362" height="285" key="GridCell.Tab.0.right/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1578041783496" />
+    <state width="1362" height="285" key="GridCell.Tab.0.right/0.0.1920.1050/1920.0.1920.1050@1920.0.1920.1050" timestamp="1578047893209" />
     <state width="872" height="347" key="GridCell.Tab.1.bottom" timestamp="1577896617506">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -127,11 +141,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="872" height="347" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1577896617506" />
-    <state x="461" y="165" key="SettingsEditor" timestamp="1577895334143">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="461" y="167" key="SettingsEditor" timestamp="1578024727996">
+      <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="461" y="165" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1577895334143" />
-    <state x="461" y="167" key="SettingsEditor/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1577788095338" />
+    <state x="461" y="167" key="SettingsEditor/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1578024727996" />
     <state x="640" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1577806925825">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
