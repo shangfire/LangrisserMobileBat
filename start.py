@@ -9,7 +9,5 @@ import time
 import importlib
 
 print("Author:@½ÚÄÜµÄ¸êµÇ")
-# c = __import__('mytest.py')
-c = importlib.import_module("mytest")
-c.bat_main()
-# mytest.bat_main()
+module = importlib.import_module("bat_core")
+module.bat_main()

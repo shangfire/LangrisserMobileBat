@@ -10,8 +10,6 @@ import time
 # import cv2
 # import sys
 
-# sys.setdefaultencoding('gbk')
-
 
 # µ¥»÷
 def single_click(x, y):
