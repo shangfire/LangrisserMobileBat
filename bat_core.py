@@ -222,6 +222,12 @@ def bat_main():
     4.脚本一旦开始执行后，不要在梦幻模拟战窗口区域移动或点击鼠标干扰脚本执行，最好是什么也不动\n\
     5.唯一需要人工干预的地方是第一次刷的时候进入战斗地图时的准备画面，给了10秒时间调换人物，\n\
     10秒并不算长，所以要上场的人物的技能和兵种最好是在外面就调好\n\
+    6.脚本源码在脚本目录的bat_core.py中，可以自行修改\n\
+    7.脚本的主要流程是在模拟鼠标点击，有两个关键的点是如何判断三号位存在和战斗结束，目前采用的方法是比对关键区域的图像，\n\
+    图像模板在脚本目录下的grey1.jpg和grey2.jpg中，判断比对结果的阈值在脚本目录的config.ini中，分别对应了三号位比对和战斗结束比对。\n\
+    脚本启动后，留意脚本输出的结果，如果发现三号位存在但图像对比结果仍然不通过的话，可以调低config.ini中的阈值使其略低于图像比对结果即可，\n\
+    同理战斗结束图像比对也是如此。注意不要调的太低，否则容易被干扰\n\
+    8.第七条看不明白的话可以先不管，脚本跑起来以后注意下脚本输出信息就知道是什么意思了\n\
     输入回车表示确认以上事项")
 
     inp = input("请输入想要刷的兄贵ID，1-步/2-弓/3-枪/4-飞/5-骑/6-僧，以回车确定：")
@@ -358,8 +364,8 @@ def bat_main():
             # index = 0
             while True:
                 time_div_check_3 = time.time() - check_pso_3_start_time
-                if time_div_check_3 > 120:
-                    print("三号位检测超时，退出检测循环")
+                if time_div_check_3 > 40:
+                    print("三号位检测超过40秒，这个房间已经没什么吸引力了，退出检测循环")
                     check_pos_3_timeout = True
                     break
                 print("点击三号位位置")
@@ -389,10 +395,16 @@ def bat_main():
                     win32api.Sleep(1000)
 
             if check_pos_3_timeout:
-                win32api.Sleep(5000)
-                print("点击返回")
-                single_click(83, 59)
+                win32api.Sleep(2000)
+                print("点击空白")
+                single_click(60, 415)
                 win32api.Sleep(1000)
+                print("点击离开队伍")
+                single_click(173, 582)
+                win32api.Sleep(1000)
+                print("点击返回")
+                single_click(86, 60)
+                win32api.Sleep(2000)
             else:
                 break
 
@@ -436,6 +448,17 @@ def bat_main():
                     win32api.Sleep(5000)
                     success_round = success_round + 1
                     break
+
+            if battle_last_time > 1200:
+                print("战斗已超过20分钟还没检测到结束，应该是输了")
+                print("点击空白")
+                single_click(542, 110)
+                win32api.Sleep(3000)
+                print("点击取消邀请")
+                single_click(432, 470)
+                win32api.Sleep(5000)
+                success_round = success_round + 1
+                break
 
         print("战斗结束，总战斗次数为：" + str(success_round))
         if target_round != 0 and success_round >= target_round:
