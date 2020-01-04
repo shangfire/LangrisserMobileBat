@@ -6,10 +6,10 @@ import win32gui
 import win32con
 import time
 import configparser
+import os
 # import pytesseract
 # import os
 # import cv2
-# import sys
 
 
 # 单击
@@ -40,9 +40,14 @@ def drag_to_top(x, y, distance):
 
 
 # 脚本退出
-def bat_exit():
-    input("脚本执行完毕，输入回车以结束\n")
-    exit(0)
+def bat_exit(shutdown):
+    if shutdown != 0:
+        print("脚本执行完毕，5秒后将关机")
+        win32api.Sleep(5000)
+        os.system("shutdown /s /t 0")
+    else:
+        input("脚本执行完毕，输入回车以结束\n")
+        exit(0)
     return
 
 
@@ -185,6 +190,7 @@ def bat_main():
     start_pc = 120
     start_hb = 10
     start_time = time.time()
+    shutdown = 0
     success_round = 0
     eat_bg = 0
 
@@ -206,15 +212,16 @@ def bat_main():
     # img2 = cv2.imread("binarization1.jpg")
     # print(classify_hist_with_split(img1, img2))
     # CompareImage.compare_image("binarization.jpg", "binarization1.jpg")
-    # bat_exit()
+    # bat_exit(0)
 
     # 脚本开始
     input("简单兄贵挂机脚本（v1.0）即将开始，请确保：\n\
     1.脚本启动后移开脚本窗口，避开左上角1024*768的区域（那里将会是梦战窗口的地方）\n\
     2.梦幻模拟战程序存在且窗口可见无遮挡（不能是最小化，也不能被遮挡在别的窗口之后）\n\
-    3.脚本一旦开始执行后，不要在梦幻模拟战窗口区域移动或点击鼠标干扰脚本执行，最好是什么也不动\n\
-    4.要求当前游戏页面为大地图主页面，别的乱七八糟的都不要有\n\
-    5.目前脚本不支持进场以后调动人员，请自行保证上场的两个人不会翻车，最好是手动挂过一次以后再执行脚本\n\
+    3.要求当前游戏页面为大地图主页面，别的乱七八糟的都不要有\n\
+    4.脚本一旦开始执行后，不要在梦幻模拟战窗口区域移动或点击鼠标干扰脚本执行，最好是什么也不动\n\
+    5.唯一需要人工干预的地方是第一次刷的时候进入战斗地图时的准备画面，给了10秒时间调换人物，\n\
+    10秒并不算长，所以要上场的人物的技能和兵种最好是在外面就调好\n\
     输入回车表示确认以上事项")
 
     inp = input("请输入想要刷的兄贵ID，1-步/2-弓/3-枪/4-飞/5-骑/6-僧，以回车确定：")
@@ -222,30 +229,37 @@ def bat_main():
     if target_xg_id != 1 and target_xg_id != 2 and target_xg_id != 3 \
             and target_xg_id != 4 and target_xg_id != 5 and target_xg_id != 6:
         print("输入的兄贵ID错误，兄贵ID只能是1-6之间的数字")
-        bat_exit()
+        bat_exit(0)
 
     inp = input("请输入想要刷的次数，输入0表示一直刷到没有体力，以回车确定：")
     target_round = int(inp)
     if target_round < 0:
         print("输入的次数错误，次数只能是0及以上的数字")
-        bat_exit()
+        bat_exit(0)
 
     inp = input("请输入当前体力，以回车确定：")
     start_pc = int(inp)
     if start_pc < 0:
         print("输入的体力错误，体力只能是0及以上的数字")
-        bat_exit()
+        bat_exit(0)
 
     inp = input("请输入当前汉堡数量，以回车确定：")
     start_hb = int(inp)
     if start_hb < 0:
         print("输入的汉堡数量错误，汉堡数量只能是0及以上的数字")
-        bat_exit()
+        bat_exit(0)
+
+    inp = input("脚本执行完后是否关机，0-否/1-是，以回车确定：")
+    shutdown = int(inp)
+    if shutdown != 0 and shutdown != 1:
+        print("关机控制输入错误，只能是0或1")
+        bat_exit(0)
 
     print("想要刷的兄贵是：" + str(target_xg_id))
     print("想要刷的次数是：" + str(target_round))
     print("当前体力为：" + str(start_pc))
     print("当前汉堡为：" + str(start_hb))
+    print("脚本结束后是否关机：" + str(shutdown))
     input("输入回车表示确认")
 
     start_time = time.time()
@@ -256,7 +270,7 @@ def bat_main():
     handle_lan = win32gui.FindWindow("UnityWndClass", "梦幻模拟战")
     if handle_lan == 0:
         print("无法查找到梦幻模拟战窗口，脚本即将退出")
-        bat_exit()
+        bat_exit(0)
     else:
         print("查找到梦幻模拟战窗口:" + str(handle_lan))
         win32api.Sleep(1000)
@@ -270,7 +284,7 @@ def bat_main():
     win32api.Sleep(2000)
 
     print("点击日常活动")
-    single_click(882, 290)
+    single_click(973, 290)
     win32api.Sleep(1000)
 
     print("点击兄贵健身房")
@@ -287,7 +301,7 @@ def bat_main():
             win32api.Sleep(1000)
             if eat_bg >= start_hb:
                 print("当前汉堡不足")
-                bat_exit()
+                bat_exit(shutdown)
             print("点击体力+号")
             single_click(764, 50)
             win32api.Sleep(1000)
@@ -297,6 +311,7 @@ def bat_main():
             print("点击空白消除汉堡对话框")
             single_click(267, 118)
             win32api.Sleep(1000)
+            eat_bg = eat_bg + 1
         else:
             print("当前体力为：" + str(current_pc) + ",足够继续")
             win32api.Sleep(1000)
@@ -323,7 +338,7 @@ def bat_main():
 
             print("向上拖拽列表")
             drag_to_top(375, 500, 250)
-            win32api.Sleep(2000)
+            win32api.Sleep(1000)
 
             print("选中LV.70")
             single_click(371, 638)
@@ -382,16 +397,20 @@ def bat_main():
                 break
 
         print("战斗开始")
+        if success_round == 0:
+            print("第一次刷，给10秒时间调换人物")
+            win32api.Sleep(10000)
+
         print("点击出击")
         single_click(957, 700)
         battle_start_time = time.time()
         while True:
             win32api.Sleep(3000)
             battle_last_time = time.time() - battle_start_time
-            if success_round == 0 and battle_last_time < 60:
-                print("第一次刷，在60秒内定时点击自动")
-                single_click(977, 232)
-                win32api.Sleep(1000)
+            if success_round == 0:
+                if battle_last_time < 60:
+                    print("第一次刷，在60秒内循环点击自动")
+                    single_click(977, 232)
 
             if battle_last_time > 180:
                 print("战斗已超过三分钟，截屏战斗结算区域")
@@ -421,8 +440,6 @@ def bat_main():
         print("战斗结束，总战斗次数为：" + str(success_round))
         if target_round != 0 and success_round >= target_round:
             print("战斗次数已达目标值，脚本即将退出")
-            bat_exit()
+            bat_exit(shutdown)
         else:
             print("开始下一轮战斗")
-
-    bat_exit()
