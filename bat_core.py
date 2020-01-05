@@ -276,7 +276,7 @@ def bat_main():
         win32gui.SetWindowPos(handle_bat, win32con.HWND_TOPMOST, 1024, 0, 600, 768, win32con.SWP_NOZORDER)
 
     # 脚本开始
-    print("简单兄贵挂机脚本（v1.1）即将开始，请确保：\n\
+    print("简单兄贵挂机脚本（v1.2）即将开始，请确保：\n\
     1.梦幻模拟战程序存在，目前只支持官网的pc端\n\
     2.当前游戏页面为大地图主页面，别的乱七八糟的都不要有\n\
     3.脚本开始运行后梦战模拟战窗口不要被遮挡，也不要在梦幻模拟战窗口区域移动或点击鼠标干扰脚本执行\n\
@@ -569,7 +569,6 @@ def bat_main():
                         print("点击继续邀请")
                         single_click(595, 470)
                         win32api.Sleep(5000)
-
                     break
 
             if battle_last_time > 1200:
@@ -578,14 +577,10 @@ def bat_main():
                 single_click(542, 110)
                 win32api.Sleep(3000)
                 success_round = success_round + 1
-
-                print("检查体力是否能继续")
-                if need_eat_bg(start_pc, (time.time() - start_time) / 300, eat_bg, success_round):
-                    last_round_ret = -1
-                    print("点击取消邀请")
-                    single_click(432, 470)
-                    win32api.Sleep(5000)
-
+                last_round_ret = -1
+                print("点击取消邀请")
+                single_click(432, 470)
+                win32api.Sleep(5000)
                 break
 
         print("战斗结束，总战斗次数为：" + str(success_round))
