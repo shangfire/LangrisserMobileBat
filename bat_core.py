@@ -276,8 +276,8 @@ def bat_main():
         win32gui.SetWindowPos(handle_bat, win32con.HWND_TOPMOST, 1024, 0, 600, 768, win32con.SWP_NOZORDER)
 
     # 脚本开始
-    print("简单兄贵挂机脚本（v1.0）即将开始，请确保：\n\
-    1.梦幻模拟战程序存在\n\
+    print("简单兄贵挂机脚本（v1.1）即将开始，请确保：\n\
+    1.梦幻模拟战程序存在，目前只支持官网的pc端\n\
     2.当前游戏页面为大地图主页面，别的乱七八糟的都不要有\n\
     3.脚本开始运行后梦战模拟战窗口不要被遮挡，也不要在梦幻模拟战窗口区域移动或点击鼠标干扰脚本执行\n\
     4.唯一需要人工干预的地方是第一次刷的时候进入战斗地图时的准备画面，给了10秒时间调换人物，\
@@ -398,14 +398,16 @@ def bat_main():
                 print("当前体力为：" + str(current_pc) + ",足够继续")
                 win32api.Sleep(1000)
 
+        # 取消邀请会在健身房页面
+        # 继续邀请会在组队页面，但是继续邀请页面返回的话直接返回到大地图
         need_exit_room = False
         while True:
-            if last_round_ret != 1 or need_exit_room:
+            if last_round_ret != 1 and not need_exit_room:
                 print("点击对应兄贵")
                 if target_xg_id == 1:
                     single_click(219, 228)
                 elif target_xg_id == 2:
-                    single_click(97, 306) # 这个位置是容易被邀请遮挡的位置，故定位靠左一点
+                    single_click(97, 306)  # 这个位置是容易被邀请遮挡的位置，故定位靠左一点
                 elif target_xg_id == 3:
                     single_click(219, 389)
                 elif target_xg_id == 4:
@@ -428,6 +430,7 @@ def bat_main():
                 single_click(371, 638)
                 win32api.Sleep(2000)
 
+            if last_round_ret != 1 or need_exit_room:
                 print("点击创建队伍")
                 single_click(870, 700)
                 win32api.Sleep(2000)
@@ -482,13 +485,14 @@ def bat_main():
                         image_binarization("grab.jpg", 200)
                         print("比对预留图像")
                         com_ret = CompareImage.compare_image("grey.jpg", "grey3.jpg")
-                        if com_ret > threshold3:
+                        if com_ret > threshold4:
                             print("比对成功，三号位有球")
                         else:
                             print("比对不成功，三号位无球，需要重新组队")
                             need_exit_room = True
                             break
 
+                    need_exit_room = False
                     print("点击开始战斗")
                     single_click(835, 586)
                     win32api.Sleep(5000)
@@ -507,16 +511,19 @@ def bat_main():
                 win32api.Sleep(1000)
                 print("点击离开队伍")
                 single_click(173, 582)
-                win32api.Sleep(1000)
-                print("点击返回")
-                single_click(86, 60)
                 win32api.Sleep(2000)
+                # if last_round_ret == 0:
+                #     print("点击返回")
+                #     single_click(86, 60)
+                #     win32api.Sleep(2000)
+                # else:
+                #     last_round_ret = 0
             else:
                 break
 
         print("战斗开始")
         if success_round == 0:
-            print("第一次刷，给10秒时间调换人物")
+            print("第一次刷，给10秒时间调换人物，不需要调换或者已经调换好了可以手动点击“出击”早点开始")
             win32api.Sleep(10000)
 
         print("点击出击")
