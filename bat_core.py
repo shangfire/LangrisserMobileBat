@@ -183,6 +183,38 @@ def image_binarization(img_path, threshold):
     # img.save("binarization.jpg")
 
 
+def translate_xionggui(xionggui_id):
+    if xionggui_id == 1:
+        return "步"
+    elif xionggui_id == 2:
+        return "弓"
+    elif xionggui_id == 3:
+        return "枪"
+    elif xionggui_id == 4:
+        return "飞"
+    elif xionggui_id == 5:
+        return "骑"
+    elif xionggui_id == 6:
+        return "僧"
+
+
+def translate_yes_or_no(yes_or_no):
+    if yes_or_no == 0:
+        return "否"
+    elif yes_or_no == 1:
+        return "是"
+
+
+def need_eat_bg(start_pc, pc_grow, eat_bg, suc_round):
+    current_pc = int(start_pc + pc_grow + eat_bg * 50 - suc_round * 16)
+    if current_pc < 16:
+        print("当前体力为：" + str(current_pc) + ",需要吃汉堡")
+        return True
+    else:
+        print("当前体力为：" + str(current_pc) + ",不需要吃汉堡")
+        return False
+
+
 def bat_main():
     # 一些测试时预定义的数值
     target_xg_id = 5
@@ -191,6 +223,8 @@ def bat_main():
     start_hb = 10
     start_time = time.time()
     shutdown = 0
+    exit_pos_2_no_ball = 1
+    exit_pos_3_no_ball = 0
     success_round = 0
     eat_bg = 0
 
@@ -198,10 +232,15 @@ def bat_main():
     config.read("config.ini")
     threshold1 = float(config.get("threshold", "threshold1"))
     threshold2 = float(config.get("threshold", "threshold2"))
+    threshold3 = float(config.get("threshold", "threshold3"))
+    threshold4 = float(config.get("threshold", "threshold4"))
 
     # 测试代码
     # grab_pos(652, 359, 755, 389)
     # grab_pos(445, 236, 573, 270)
+    # image_binarization("grab.jpg", 200)
+    # grab_pos(408, 356, 427, 375)
+    # grab_pos(673, 356, 692, 375)
     # image_binarization("grab.jpg", 200)
     # img1 = cv2.imread("grey.jpg")
     # img2 = cv2.imread("grey1.jpg")
@@ -212,47 +251,75 @@ def bat_main():
     # img2 = cv2.imread("binarization1.jpg")
     # print(classify_hist_with_split(img1, img2))
     # CompareImage.compare_image("binarization.jpg", "binarization1.jpg")
+
+    # handle_lan = win32gui.FindWindow("UnityWndClass", "梦幻模拟战")
+    # if handle_lan == 0:
+    #     print("无法查找到梦幻模拟战窗口，脚本即将退出")
+    #     bat_exit(0)
+    # else:
+    #     print("查找到梦幻模拟战窗口:" + str(handle_lan))
+    #     win32api.Sleep(1000)
+    #
+    # print("将窗口移动到0,0,1024,768")
+    # win32gui.PostMessage(handle_lan, win32con.WM_SYSCOMMAND, win32con.SC_RESTORE, 0)
+    # win32api.Sleep(1000)
+    # win32gui.SetWindowPos(handle_lan, win32con.HWND_TOPMOST, 0, 0, 1024, 768, win32con.SWP_SHOWWINDOW)
+    # win32gui.SetWindowPos(handle_lan, win32con.HWND_NOTOPMOST, 0, 0, 1024, 768, win32con.SWP_SHOWWINDOW)
+    # win32api.Sleep(1000)
+
     # bat_exit(0)
 
+    # 移动脚本窗口
+    handle_bat = win32gui.FindWindow("ConsoleWindowClass", None)
+    if handle_bat != 0:
+        # print("移动脚本窗口")
+        win32gui.SetWindowPos(handle_bat, win32con.HWND_TOPMOST, 1024, 0, 600, 768, win32con.SWP_NOZORDER)
+
     # 脚本开始
-    input("简单兄贵挂机脚本（v1.0）即将开始，请确保：\n\
-    1.脚本启动后移开脚本窗口，避开左上角1024*768的区域（那里将会是梦战窗口的地方）\n\
-    2.梦幻模拟战程序存在且窗口可见无遮挡（不能是最小化，也不能被遮挡在别的窗口之后）\n\
-    3.要求当前游戏页面为大地图主页面，别的乱七八糟的都不要有\n\
-    4.脚本一旦开始执行后，不要在梦幻模拟战窗口区域移动或点击鼠标干扰脚本执行，最好是什么也不动\n\
-    5.唯一需要人工干预的地方是第一次刷的时候进入战斗地图时的准备画面，给了10秒时间调换人物，\n\
-    10秒并不算长，所以要上场的人物的技能和兵种最好是在外面就调好\n\
-    6.脚本源码在脚本目录的bat_core.py中，可以自行修改\n\
-    7.脚本的主要流程是在模拟鼠标点击，有两个关键的点是如何判断三号位存在和战斗结束，目前采用的方法是比对关键区域的图像，\n\
-    图像模板在脚本目录下的grey1.jpg和grey2.jpg中，判断比对结果的阈值在脚本目录的config.ini中，分别对应了三号位比对和战斗结束比对。\n\
-    脚本启动后，留意脚本输出的结果，如果发现三号位存在但图像对比结果仍然不通过的话，可以调低config.ini中的阈值使其略低于图像比对结果即可，\n\
-    同理战斗结束图像比对也是如此。注意不要调的太低，否则容易被干扰\n\
-    8.第七条看不明白的话可以先不管，脚本跑起来以后注意下脚本输出信息就知道是什么意思了\n\
-    输入回车表示确认以上事项")
+    print("简单兄贵挂机脚本（v1.0）即将开始，请确保：\n\
+    1.梦幻模拟战程序存在\n\
+    2.当前游戏页面为大地图主页面，别的乱七八糟的都不要有\n\
+    3.脚本开始运行后梦战模拟战窗口不要被遮挡，也不要在梦幻模拟战窗口区域移动或点击鼠标干扰脚本执行\n\
+    4.唯一需要人工干预的地方是第一次刷的时候进入战斗地图时的准备画面，给了10秒时间调换人物，\
+10秒并不算长，所以要上场的人物的技能和兵种最好是在外面就调好\n\
+    5.脚本源码在脚本目录的bat_core.py中，可以自行修改\n\
+    6.脚本的主要流程是在模拟鼠标点击，有几个关键的点是如何判断三号位存在、战斗结束以及二三号位是否有球，目前采用的方法是比对关键区域的图像，\
+图像模板在脚本目录下的grey1.jpg、grey2.jpg、grey3.jpg、grey4.jpg中，判断比对结果的阈值在脚本目录的config.ini中，分别对应了三号位比对、战斗结束比对、二号位有球比对、三号位有球比对。\
+脚本启动后，留意脚本输出的结果，如果发现三号位存在但图像对比结果仍然不通过的话，可以调低config.ini中的阈值使其略低于图像比对结果即可，\
+同理其他图像比对也是如此。注意不要调的太低，否则容易被干扰\n\
+    7.上面一条看不明白的话可以先不管，脚本跑起来以后注意下脚本输出信息就知道是什么意思了\n\
+    8.脚本随时可以关闭，感觉不对劲了关闭脚本即可")
+    input("输入回车表示确认以上事项")
 
     inp = input("请输入想要刷的兄贵ID，1-步/2-弓/3-枪/4-飞/5-骑/6-僧，以回车确定：")
     target_xg_id = int(inp)
     if target_xg_id != 1 and target_xg_id != 2 and target_xg_id != 3 \
             and target_xg_id != 4 and target_xg_id != 5 and target_xg_id != 6:
-        print("输入的兄贵ID错误，兄贵ID只能是1-6之间的数字")
+        print("输入错误，只能是1-6之间的数字")
         bat_exit(0)
 
     inp = input("请输入想要刷的次数，输入0表示一直刷到没有体力，以回车确定：")
     target_round = int(inp)
     if target_round < 0:
-        print("输入的次数错误，次数只能是0及以上的数字")
+        print("输入错误，只能是0及以上的数字")
         bat_exit(0)
 
     inp = input("请输入当前体力，以回车确定：")
     start_pc = int(inp)
     if start_pc < 0:
-        print("输入的体力错误，体力只能是0及以上的数字")
+        print("输入错误，只能是0及以上的数字")
         bat_exit(0)
 
     inp = input("请输入当前汉堡数量，以回车确定：")
     start_hb = int(inp)
     if start_hb < 0:
-        print("输入的汉堡数量错误，汉堡数量只能是0及以上的数字")
+        print("输入错误，只能是0及以上的数字")
+        bat_exit(0)
+
+    inp = input("3号位无球时重新组队，0-否/1-是，以回车确定：")
+    exit_pos_3_no_ball = int(inp)
+    if exit_pos_3_no_ball != 0 and exit_pos_3_no_ball != 1:
+        print("输入错误，只能是0或1")
         bat_exit(0)
 
     inp = input("脚本执行完后是否关机，0-否/1-是，以回车确定：")
@@ -261,11 +328,16 @@ def bat_main():
         print("关机控制输入错误，只能是0或1")
         bat_exit(0)
 
-    print("想要刷的兄贵是：" + str(target_xg_id))
+    print("\n想要刷的兄贵是：" + translate_xionggui(target_xg_id))
     print("想要刷的次数是：" + str(target_round))
     print("当前体力为：" + str(start_pc))
     print("当前汉堡为：" + str(start_hb))
-    print("脚本结束后是否关机：" + str(shutdown))
+    print("三号位无球时是否重新组队：" + translate_yes_or_no(exit_pos_3_no_ball))
+    print("脚本结束后是否关机：" + translate_yes_or_no(shutdown))
+    print("config.ini中配置的三号位存在的比较阈值为：" + str(threshold1))
+    print("config.ini中配置的战斗结束的比较阈值为：" + str(threshold2))
+    print("config.ini中配置的二号位有球的比较阈值为：" + str(threshold3))
+    print("config.ini中配置的三号位有球的比较阈值为：" + str(threshold4))
     input("输入回车表示确认")
 
     start_time = time.time()
@@ -282,8 +354,10 @@ def bat_main():
         win32api.Sleep(1000)
 
     print("将窗口移动到0,0,1024,768")
-    win32gui.SetWindowPos(handle_lan, win32con.HWND_TOPMOST, 0, 0, 1024, 768, win32con.SWP_NOZORDER)
-    win32api.Sleep(1000)
+    win32gui.PostMessage(handle_lan, win32con.WM_SYSCOMMAND, win32con.SC_RESTORE, 0)
+    win32gui.SetWindowPos(handle_lan, win32con.HWND_TOPMOST, 0, 0, 1024, 768, win32con.SWP_SHOWWINDOW)
+    win32gui.SetWindowPos(handle_lan, win32con.HWND_NOTOPMOST, 0, 0, 1024, 768, win32con.SWP_SHOWWINDOW)
+    win32api.Sleep(2000)
 
     print("点击秘境")
     single_click(977, 303)
@@ -297,76 +371,79 @@ def bat_main():
     single_click(530, 160)
     win32api.Sleep(2000)
 
+    last_round_ret = 0
     while True:
-        print("检查当前体力是否足够（检查体力会有些许误差）")
-        time_div = time.time() - start_time
-        pc_grow = time_div / 300
-        current_pc = int(start_pc + pc_grow + eat_bg * 50 - success_round * 16)
-        if current_pc < 16:
-            print("当前体力为：" + str(current_pc) + ",需要吃汉堡")
-            win32api.Sleep(1000)
-            if eat_bg >= start_hb:
-                print("当前汉堡不足")
-                bat_exit(shutdown)
-            print("点击体力+号")
-            single_click(764, 50)
-            win32api.Sleep(1000)
-            print("点击汉堡")
-            single_click(420, 469)
-            win32api.Sleep(2000)
-            print("点击空白消除汉堡对话框")
-            single_click(267, 118)
-            win32api.Sleep(1000)
-            eat_bg = eat_bg + 1
-        else:
-            print("当前体力为：" + str(current_pc) + ",足够继续")
-            win32api.Sleep(1000)
+        if last_round_ret != 1:
+            print("检查当前体力是否足够（检查体力会有些许误差）")
+            time_div = time.time() - start_time
+            pc_grow = time_div / 300
+            current_pc = int(start_pc + pc_grow + eat_bg * 50 - success_round * 16)
+            if current_pc < 16:
+                print("当前体力为：" + str(current_pc) + ",需要吃汉堡")
+                win32api.Sleep(1000)
+                if eat_bg >= start_hb:
+                    print("当前汉堡不足")
+                    bat_exit(shutdown)
+                print("点击体力+号")
+                single_click(764, 50)
+                win32api.Sleep(1000)
+                print("点击汉堡")
+                single_click(420, 469)
+                win32api.Sleep(2000)
+                print("点击空白消除汉堡对话框")
+                single_click(267, 118)
+                win32api.Sleep(1000)
+                eat_bg = eat_bg + 1
+            else:
+                print("当前体力为：" + str(current_pc) + ",足够继续")
+                win32api.Sleep(1000)
 
+        need_exit_room = False
         while True:
-            print("点击对应兄贵")
-            if target_xg_id == 1:
-                single_click(219, 228)
-            elif target_xg_id == 2:
-                single_click(97, 306) # 这个位置是容易被邀请遮挡的位置，故定位靠左一点
-            elif target_xg_id == 3:
-                single_click(219, 389)
-            elif target_xg_id == 4:
-                single_click(219, 465)
-            elif target_xg_id == 5:
-                single_click(219, 552)
-            elif target_xg_id == 6:
-                single_click(219, 630)
-            win32api.Sleep(1000)
+            if last_round_ret != 1 or need_exit_room:
+                print("点击对应兄贵")
+                if target_xg_id == 1:
+                    single_click(219, 228)
+                elif target_xg_id == 2:
+                    single_click(97, 306) # 这个位置是容易被邀请遮挡的位置，故定位靠左一点
+                elif target_xg_id == 3:
+                    single_click(219, 389)
+                elif target_xg_id == 4:
+                    single_click(219, 465)
+                elif target_xg_id == 5:
+                    single_click(219, 552)
+                elif target_xg_id == 6:
+                    single_click(219, 630)
+                win32api.Sleep(1000)
 
-            print("点击组队")
-            single_click(958, 700)
-            win32api.Sleep(3000)
+                print("点击组队")
+                single_click(958, 700)
+                win32api.Sleep(3000)
 
-            print("向上拖拽列表")
-            drag_to_top(375, 500, 250)
-            win32api.Sleep(1000)
+                print("向上拖拽列表")
+                drag_to_top(375, 500, 250)
+                win32api.Sleep(1000)
 
-            print("选中LV.70")
-            single_click(371, 638)
-            win32api.Sleep(2000)
+                print("选中LV.70")
+                single_click(371, 638)
+                win32api.Sleep(2000)
 
-            print("点击创建队伍")
-            single_click(870, 700)
-            win32api.Sleep(2000)
+                print("点击创建队伍")
+                single_click(870, 700)
+                win32api.Sleep(2000)
 
-            print("点击创建")
-            single_click(652, 585)
-            win32api.Sleep(2000)
+                print("点击创建")
+                single_click(652, 585)
+                win32api.Sleep(2000)
 
             print("循环检测三号位是否存在")
-            check_pos_3_timeout = False
             check_pso_3_start_time = time.time()
             # index = 0
             while True:
                 time_div_check_3 = time.time() - check_pso_3_start_time
                 if time_div_check_3 > 40:
                     print("三号位检测超过40秒，这个房间已经没什么吸引力了，退出检测循环")
-                    check_pos_3_timeout = True
+                    need_exit_room = True
                     break
                 print("点击三号位位置")
                 single_click(779, 282)
@@ -385,16 +462,45 @@ def bat_main():
                     print("点击空白处消除三号位资料框")
                     single_click(787, 171)
                     win32api.Sleep(1000)
+
+                    if exit_pos_2_no_ball != 0:
+                        print("判断二号位是否有球")
+                        grab_pos(408, 356, 427, 375)
+                        image_binarization("grab.jpg", 200)
+                        print("比对预留图像")
+                        com_ret = CompareImage.compare_image("grey.jpg", "grey3.jpg")
+                        if com_ret > threshold3:
+                            print("比对成功，二号位有球")
+                        else:
+                            print("比对不成功，二号位无球，需要重新组队")
+                            need_exit_room = True
+                            break
+
+                    if exit_pos_3_no_ball != 0:
+                        print("判断三号位是否有球")
+                        grab_pos(673, 356, 692, 375)
+                        image_binarization("grab.jpg", 200)
+                        print("比对预留图像")
+                        com_ret = CompareImage.compare_image("grey.jpg", "grey3.jpg")
+                        if com_ret > threshold3:
+                            print("比对成功，三号位有球")
+                        else:
+                            print("比对不成功，三号位无球，需要重新组队")
+                            need_exit_room = True
+                            break
+
                     print("点击开始战斗")
                     single_click(835, 586)
                     win32api.Sleep(5000)
                     break
                 else:
                     print("比对不成功，三号位不存在")
+                    print("点击空白处消除一下干扰")
+                    single_click(787, 171)
                     print("1秒后继续尝试比对")
                     win32api.Sleep(1000)
 
-            if check_pos_3_timeout:
+            if need_exit_room:
                 win32api.Sleep(2000)
                 print("点击空白")
                 single_click(60, 415)
@@ -443,10 +549,20 @@ def bat_main():
                     print("点击空白处继续")
                     single_click(542, 110)
                     win32api.Sleep(3000)
-                    print("点击取消邀请")
-                    single_click(432, 470)
-                    win32api.Sleep(5000)
                     success_round = success_round + 1
+
+                    print("检查体力是否能继续")
+                    if need_eat_bg(start_pc, (time.time() - start_time) / 300, eat_bg, success_round):
+                        last_round_ret = -1
+                        print("点击取消邀请")
+                        single_click(432, 470)
+                        win32api.Sleep(5000)
+                    else:
+                        last_round_ret = 1
+                        print("点击继续邀请")
+                        single_click(595, 470)
+                        win32api.Sleep(5000)
+
                     break
 
             if battle_last_time > 1200:
@@ -454,10 +570,15 @@ def bat_main():
                 print("点击空白")
                 single_click(542, 110)
                 win32api.Sleep(3000)
-                print("点击取消邀请")
-                single_click(432, 470)
-                win32api.Sleep(5000)
                 success_round = success_round + 1
+
+                print("检查体力是否能继续")
+                if need_eat_bg(start_pc, (time.time() - start_time) / 300, eat_bg, success_round):
+                    last_round_ret = -1
+                    print("点击取消邀请")
+                    single_click(432, 470)
+                    win32api.Sleep(5000)
+
                 break
 
         print("战斗结束，总战斗次数为：" + str(success_round))
