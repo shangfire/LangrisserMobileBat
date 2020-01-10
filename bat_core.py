@@ -52,10 +52,9 @@ def bat_exit(shutdown):
 
 
 # 抓取指定位置图像
-def grab_pos(left, top, right, bottom):
-    size = (left, top, right, bottom)
-    img = ImageGrab.grab(size)
-    img.save("grab.jpg")
+def grab_pos(box, path):
+    img = ImageGrab.grab(box)
+    img.save(path)
     return
 
 
@@ -235,8 +234,17 @@ def bat_main():
     threshold3 = float(config.get("threshold", "threshold3"))
     threshold4 = float(config.get("threshold", "threshold4"))
 
+    box_pos3_f = (652, 362, 755, 394)
+    box_pos3_nf = (652, 385, 755, 417)
+    box_pos2_ball = (408, 356, 427, 375)
+    box_pos3_ball = (673, 356, 692, 375)
+    box_battle_over = (445, 236, 573, 270)
+
+    path_grab = "grab.jpg"
+
     # 测试代码
-    # grab_pos(652, 359, 755, 389)
+    # grab_pos(652, 362, 755, 394)
+    # grab_pos(652, 385, 755, 417)
     # grab_pos(445, 236, 573, 270)
     # image_binarization("grab.jpg", 200)
     # grab_pos(408, 356, 427, 375)
@@ -276,7 +284,7 @@ def bat_main():
         win32gui.SetWindowPos(handle_bat, win32con.HWND_TOPMOST, 1024, 0, 600, 768, win32con.SWP_NOZORDER)
 
     # 脚本开始
-    print("简单兄贵挂机脚本（v1.2）即将开始，请确保：\n\
+    print("简单兄贵挂机脚本（v1.3）即将开始，请确保：\n\
     1.梦幻模拟战程序存在，目前只支持官网的pc端\n\
     2.当前游戏页面为大地图主页面，别的乱七八糟的都不要有\n\
     3.脚本开始运行后梦战模拟战窗口不要被遮挡，也不要在梦幻模拟战窗口区域移动或点击鼠标干扰脚本执行\n\
@@ -451,16 +459,25 @@ def bat_main():
                 print("点击三号位位置")
                 single_click(779, 282)
                 win32api.Sleep(1500)
+                print("三号位名片布局在是好友和非好友的情况下不一样，需要比较两次，两次比较结果任意一次大于阈值即算通过")
+                print("第一次比较三号位图像")
                 print("截屏当前位置")
-                grab_pos(652, 359, 755, 389)
-                image_binarization("grab.jpg", 200)
+                grab_pos(box_pos3_nf, path_grab)
+                image_binarization(path_grab, 200)
                 print("比对预留图像")
-                com_ret = CompareImage.compare_image("grey.jpg", "grey1.jpg")
+                com_ret1 = CompareImage.compare_image("grey.jpg", "grey_pos3_nf.jpg")
+                print("第二次比较三号位图像")
+                print("截屏当前位置")
+                grab_pos(box_pos3_f, path_grab)
+                image_binarization(path_grab, 200)
+                print("比对预留图像")
+                com_ret2 = CompareImage.compare_image("grey.jpg", "grey_pos3_f.jpg")
+
                 # com_ret = CompareImage.compare_image("grab.jpg", "1.jpg")
                 # com_ret = classify_hist_with_split("grab.jpg", "1.jpg")
                 # os.rename("grab.jpg", "grab" + str(index) + ".jpg")
                 # index = index + 1
-                if com_ret > threshold1:
+                if com_ret1 > threshold1 or com_ret2 > threshold1:
                     print("比对成功，三号位存在")
                     print("点击空白处消除三号位资料框")
                     single_click(787, 171)
@@ -468,10 +485,10 @@ def bat_main():
 
                     if exit_pos_2_no_ball != 0:
                         print("判断二号位是否有球")
-                        grab_pos(408, 356, 427, 375)
-                        image_binarization("grab.jpg", 200)
+                        grab_pos(box_pos2_ball, path_grab)
+                        image_binarization(path_grab, 200)
                         print("比对预留图像")
-                        com_ret = CompareImage.compare_image("grey.jpg", "grey3.jpg")
+                        com_ret = CompareImage.compare_image("grey.jpg", "grey_pos2_ball.jpg")
                         if com_ret > threshold3:
                             print("比对成功，二号位有球")
                         else:
@@ -481,10 +498,10 @@ def bat_main():
 
                     if exit_pos_3_no_ball != 0:
                         print("判断三号位是否有球")
-                        grab_pos(673, 356, 692, 375)
-                        image_binarization("grab.jpg", 200)
+                        grab_pos(box_pos3_ball, path_grab)
+                        image_binarization(path_grab, 200)
                         print("比对预留图像")
-                        com_ret = CompareImage.compare_image("grey.jpg", "grey3.jpg")
+                        com_ret = CompareImage.compare_image("grey.jpg", "grey_pos3_ball.jpg")
                         if com_ret > threshold4:
                             print("比对成功，三号位有球")
                         else:
@@ -539,11 +556,11 @@ def bat_main():
 
             if battle_last_time > 180:
                 print("战斗已超过三分钟，截屏战斗结算区域")
-                grab_pos(445, 236, 573, 270)
-                image_binarization("grab.jpg", 200)
+                grab_pos(box_battle_over, path_grab)
+                image_binarization(path_grab, 200)
                 print("比对预留图像")
                 # com_ret = CompareImage.compare_image("grab.jpg", "2.jpg")
-                com_ret = CompareImage.compare_image("grey.jpg", "grey2.jpg")
+                com_ret = CompareImage.compare_image("grey.jpg", "grey_battle_over.jpg")
                 if com_ret > threshold2:
                     print("比对成功，战斗已结束")
                     win32api.Sleep(5000)
@@ -558,17 +575,23 @@ def bat_main():
                     win32api.Sleep(3000)
                     success_round = success_round + 1
 
-                    print("检查体力是否能继续")
-                    if need_eat_bg(start_pc, (time.time() - start_time) / 300, eat_bg, success_round):
-                        last_round_ret = -1
-                        print("点击取消邀请")
-                        single_click(432, 470)
-                        win32api.Sleep(5000)
-                    else:
-                        last_round_ret = 1
-                        print("点击继续邀请")
-                        single_click(595, 470)
-                        win32api.Sleep(5000)
+                    # print("检查体力是否能继续")
+                    # if need_eat_bg(start_pc, (time.time() - start_time) / 300, eat_bg, success_round):
+                    #     last_round_ret = -1
+                    #     print("点击取消邀请")
+                    #     single_click(432, 470)
+                    #     win32api.Sleep(5000)
+                    # else:
+                    #     last_round_ret = 1
+                    #     print("点击继续邀请")
+                    #     single_click(595, 470)
+                    #     win32api.Sleep(5000)
+                    # break
+
+                    last_round_ret = -1
+                    print("点击取消邀请")
+                    single_click(432, 470)
+                    win32api.Sleep(5000)
                     break
 
             if battle_last_time > 1200:
