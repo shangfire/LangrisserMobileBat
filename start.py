@@ -1,4 +1,3 @@
-# encoding:gbk
 # import mytest
 from PIL import Image
 from PIL import ImageGrab
@@ -10,6 +9,6 @@ import importlib
 import configparser
 import os
 
-print("Author:@½ÚÄÜµÄ¸êµÇ")
+print("Author:@èŠ‚èƒ½çš„æˆˆç™»")
 module = importlib.import_module("bat_core")
 module.bat_main()
