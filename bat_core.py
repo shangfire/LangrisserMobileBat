@@ -513,7 +513,7 @@ def bat_main():
 
                     need_exit_room = False
                     print("点击开始战斗")
-                    single_click(835, 586)
+                    single_click(860, 630)
                     win32api.Sleep(5000)
                     break
                 else:
@@ -529,7 +529,7 @@ def bat_main():
                 single_click(60, 415)
                 win32api.Sleep(1000)
                 print("点击离开队伍")
-                single_click(173, 582)
+                single_click(173, 630)
                 win32api.Sleep(2000)
                 # if last_round_ret == 0:
                 #     print("点击返回")
@@ -592,7 +592,7 @@ def bat_main():
 
                     last_round_ret = -1
                     print("点击离开")
-                    single_click(791, 689)
+                    single_click(760, 689)
                     win32api.Sleep(5000)
                     break
 
