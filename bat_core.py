@@ -51,11 +51,17 @@ def bat_exit(shutdown):
 
 
 # 抓取指定位置图像
-def grab_pos(box, path):
-    img = ImageGrab.grab(box)
-    img.save(path)
+def grab_pos(pos_box, save_path):
+    img = ImageGrab.grab(pos_box)
+    img.save(save_path)
     return
 
+# 灰度化图像
+def image_grey(load_path, save_path):
+    img = Image.open(load_path)
+    img = img.convert('L')
+    img.save(save_path)
+    return
 
 # 图像比较类
 class CompareImage:
@@ -162,23 +168,23 @@ class CompareImage:
 #     sub_data = sub_data / 3
 #     return sub_data
 
-
-def image_binarization(img_path, threshold):
-    # 图片灰度化
-    img = Image.open(img_path)
-    img = img.convert('L')
-    img.save("grey.jpg")
-    #
-    # table = []
-    # for i in range(256):
-    #     if i < threshold:
-    #         table.append(0)
-    #     else:
-    #         table.append(1)
-    #
-    # # 图片二值化
-    # img = img.point(table, '1')
-    # img.save("binarization.jpg")
+# 图像二值化
+# def image_binarization(img_path, threshold):
+#     # 图片灰度化
+#     img = Image.open(img_path)
+#     img = img.convert('L')
+#     img.save("grey.jpg")
+    
+#     table = []
+#     for i in range(256):
+#         if i < threshold:
+#             table.append(0)
+#         else:
+#             table.append(1)
+    
+#     # 图片二值化
+#     img = img.point(table, '1')
+#     img.save("binarization.jpg")
 
 
 def translate_xionggui(xionggui_id):
@@ -242,8 +248,35 @@ def bat_main():
     box_battle_over = (445, 221, 573, 255)
 
     path_grab = "grab.jpg"
+    path_grey = "grey.jpg"
+    path_grey_pos3_nf = "grey_pos3_nf.jpg"
+    path_grey_pos3_nf_test = "grey_pos3_nf_test.jpg"
+    path_grey_pos3_f = "grey_pos3_f.jpg"
+    path_grey_pos3_f_test = "grey_pos3_f_test.jpg"
+    path_grey_pos2_ball = "grey_pos2_ball.jpg"
+    path_grey_pos2_ball_test = "grey_pos2_ball_test.jpg"
+    path_grey_pos3_ball = "grey_pos3_ball.jpg"
+    path_grey_pos3_ball_test = "grey_pos3_ball_test.jpg"
+    path_grey_battle_over = "grey_battle_over.jpg"
+    path_grey_battle_over_test = "grey_battle_over_test.jpg"
 
     # 测试代码
+    # while 1:
+    #     grap_index = input("抓图，1-三号位存在/2-二号位有球/3-三号位有球/4-战斗结束，以回车确定：")
+    #     target_grap_index = int(grap_index)
+    #     if target_grap_index == 1:
+    #         grab_pos(box_pos3_nf, path_grab)
+    #         image_grey(path_grab, path_grey_pos3_nf_test)
+    #     elif target_grap_index == 2:
+    #         grab_pos(box_pos2_ball, path_grab)
+    #         image_grey(path_grab, path_grey_pos2_ball_test)
+    #     elif target_grap_index == 3:
+    #         grab_pos(box_pos3_ball, path_grab)
+    #         image_grey(path_grab, path_grey_pos3_ball_test)
+    #     elif target_grap_index == 4:
+    #         grab_pos(box_battle_over, path_grab)
+    #         image_grey(path_grab, path_grey_battle_over_test)
+
     # grab_pos(box_pos3_f, "test.jpg")
     # grab_pos(652, 385, 755, 417)
     # grab_pos(445, 236, 573, 270)
@@ -285,7 +318,7 @@ def bat_main():
         win32gui.SetWindowPos(handle_bat, win32con.HWND_TOPMOST, 1024, 0, 600, 768, win32con.SWP_NOZORDER)
 
     # 脚本开始
-    print("简单兄贵挂机脚本（v1.6）即将开始，请确保：\n\
+    print("简单兄贵挂机脚本（v1.7）即将开始，请确保：\n\
     1.梦幻模拟战程序存在，目前只支持官网的pc端\n\
     2.当前游戏页面为大地图主页面，别的乱七八糟的都不要有\n\
     3.脚本开始运行后梦战模拟战窗口不要被遮挡，也不要在梦幻模拟战窗口区域移动或点击鼠标干扰脚本执行\n\
@@ -464,15 +497,15 @@ def bat_main():
                 print("比较三号位图像")
                 print("截屏当前位置")
                 grab_pos(box_pos3_nf, path_grab)
-                image_binarization(path_grab, 200)
+                image_grey(path_grab, path_grey)
                 print("比对预留图像")
-                com_ret1 = CompareImage.compare_image("grey.jpg", "grey_pos3_nf.jpg")
+                com_ret1 = CompareImage.compare_image(path_grey, path_grey_pos3_nf)
                 # print("第二次比较三号位图像")
                 # print("截屏当前位置")
                 # grab_pos(box_pos3_f, path_grab)
                 # image_binarization(path_grab, 200)
                 # print("比对预留图像")
-                # com_ret2 = CompareImage.compare_image("grey.jpg", "grey_pos3_f.jpg")
+                # com_ret2 = CompareImage.compare_image("grey.jpg", path_grey_pos3_f)
 
                 # com_ret = CompareImage.compare_image("grab.jpg", "1.jpg")
                 # com_ret = classify_hist_with_split("grab.jpg", "1.jpg")
@@ -488,9 +521,9 @@ def bat_main():
                     if exit_pos_2_no_ball != 0:
                         print("判断二号位是否有球")
                         grab_pos(box_pos2_ball, path_grab)
-                        image_binarization(path_grab, 200)
+                        image_grey(path_grab, path_grey)
                         print("比对预留图像")
-                        com_ret = CompareImage.compare_image("grey.jpg", "grey_pos2_ball.jpg")
+                        com_ret = CompareImage.compare_image(path_grey, path_grey_pos2_ball)
                         if com_ret > threshold3:
                             print("比对成功，二号位有球")
                         else:
@@ -501,9 +534,9 @@ def bat_main():
                     if exit_pos_3_no_ball != 0:
                         print("判断三号位是否有球")
                         grab_pos(box_pos3_ball, path_grab)
-                        image_binarization(path_grab, 200)
+                        image_grey(path_grab, path_grey)
                         print("比对预留图像")
-                        com_ret = CompareImage.compare_image("grey.jpg", "grey_pos3_ball.jpg")
+                        com_ret = CompareImage.compare_image(path_grey, path_grey_pos3_ball)
                         if com_ret > threshold4:
                             print("比对成功，三号位有球")
                         else:
@@ -514,7 +547,7 @@ def bat_main():
                     need_exit_room = False
                     print("点击开始战斗")
                     single_click(860, 630)
-                    win32api.Sleep(5000)
+                    win32api.Sleep(8000)
                     break
                 else:
                     print("比对不成功，三号位不存在")
@@ -542,8 +575,8 @@ def bat_main():
 
         print("战斗开始")
         if success_round == 0:
-            print("第一次刷，给10秒时间调换人物，不需要调换或者已经调换好了可以手动点击“出击”早点开始")
-            win32api.Sleep(10000)
+            print("第一次刷，给20秒时间调换人物，不需要调换或者已经调换好了可以手动点击“出击”早点开始")
+            win32api.Sleep(20000)
 
         print("点击出击")
         single_click(957, 700)
@@ -554,15 +587,15 @@ def bat_main():
             if success_round == 0:
                 if battle_last_time < 75:
                     print("第一次刷，在75秒内循环点击自动")
-                    single_click(977, 232)
+                    single_click(986, 204)
 
-            if battle_last_time > 180:
-                print("战斗已超过三分钟，截屏战斗结算区域")
+            if battle_last_time > 120:
+                print("战斗已超过两分钟，截屏战斗结算区域")
                 grab_pos(box_battle_over, path_grab)
-                image_binarization(path_grab, 200)
+                image_grey(path_grab, path_grey)
                 print("比对预留图像")
                 # com_ret = CompareImage.compare_image("grab.jpg", "2.jpg")
-                com_ret = CompareImage.compare_image("grey.jpg", "grey_battle_over.jpg")
+                com_ret = CompareImage.compare_image(path_grey, path_grey_battle_over)
                 if com_ret > threshold2:
                     print("比对成功，战斗已结束")
                     win32api.Sleep(5000)
@@ -593,7 +626,7 @@ def bat_main():
                     last_round_ret = -1
                     print("点击离开")
                     single_click(760, 689)
-                    win32api.Sleep(5000)
+                    win32api.Sleep(6000)
                     break
 
             if battle_last_time > 600:
@@ -605,7 +638,7 @@ def bat_main():
                 last_round_ret = -1
                 print("点击取消邀请")
                 single_click(432, 470)
-                win32api.Sleep(5000)
+                win32api.Sleep(8000)
                 break
 
         print("战斗结束，总战斗次数为：" + str(success_round))
